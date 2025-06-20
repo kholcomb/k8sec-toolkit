@@ -1,6 +1,6 @@
 module github.com/kholcomb/k8sec-toolkit
 
-go 1.22
+go 1.23.0
 
 require (
 	github.com/mattn/go-runewidth v0.0.9 // indirect
@@ -54,7 +54,7 @@ require (
 	golang.org/x/oauth2 v0.12.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.26.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
