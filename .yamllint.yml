@@ -1,0 +1,45 @@
+# yamllint configuration for k8sec-toolkit
+# See https://yamllint.readthedocs.io/en/stable/configuration.html
+
+extends: default
+
+rules:
+  # Adjust line length for GitHub Actions
+  line-length:
+    max: 120
+    level: warning
+
+  # Allow document separators for GitHub Actions
+  document-start:
+    present: false
+
+  # Allow truthy values in GitHub Actions
+  truthy:
+    allowed-values: ['true', 'false', 'on', 'off', 'yes', 'no']
+    check-keys: false
+
+  # Indentation rules
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+
+  # Comments rules
+  comments:
+    min-spaces-from-content: 1
+
+  # Brackets rules
+  brackets:
+    max-spaces-inside: 1
+    max-spaces-inside-empty: 0
+
+  # Braces rules  
+  braces:
+    max-spaces-inside: 1
+    max-spaces-inside-empty: 0
+
+ignore: |
+  .github/
+  vendor/
+  build/
+  tmp/

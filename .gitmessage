@@ -1,0 +1,37 @@
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <footer>
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Type should be one of the following:
+# * feat: A new feature
+# * fix: A bug fix
+# * docs: Documentation only changes
+# * style: Changes that do not affect the meaning of the code
+# * refactor: A code change that neither fixes a bug nor adds a feature
+# * perf: A code change that improves performance
+# * test: Adding missing tests or correcting existing tests
+# * chore: Changes to the build process or auxiliary tools
+#
+# Scope should indicate what is changing (scanner, cli, tools, etc.)
+#
+# Subject should:
+# * use imperative, present tense: "change" not "changed" nor "changes"
+# * not capitalize first letter
+# * not end with a dot (.)
+#
+# Body should include the motivation for the change and contrast this
+# with previous behavior.
+#
+# Footer should contain any information about Breaking Changes and is also
+# the place to reference GitHub issues that this commit closes.
+#
+# Breaking change example:
+# BREAKING CHANGE: `port` option has been removed.
+#
+# Closes issue example:
+# Closes #123, #456

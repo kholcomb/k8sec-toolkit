@@ -1,0 +1,222 @@
+# golangci-lint configuration for k8sec-toolkit
+# See https://golangci-lint.run/usage/configuration/ for details
+
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+  skip-dirs:
+    - vendor
+    - .git
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - ".*_generated\\.go$"
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: true
+
+linters-settings:
+  dupl:
+    threshold: 100
+
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+
+  exhaustive:
+    check-generated: false
+    default-signifies-exhaustive: false
+
+  funlen:
+    lines: 100
+    statements: 50
+
+  gci:
+    local-prefixes: github.com/kholcomb/k8sec-toolkit
+
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+      - wrapperFunc
+
+  gocyclo:
+    min-complexity: 15
+
+  godot:
+    check-all: false
+
+  gofmt:
+    simplify: true
+
+  goimports:
+    local-prefixes: github.com/kholcomb/k8sec-toolkit
+
+  golint:
+    min-confidence: 0
+
+  gomnd:
+    settings:
+      mnd:
+        checks: argument,case,condition,operation,return,assign
+
+  gomodguard:
+    allowed:
+      modules: []
+      domains: []
+    blocked:
+      modules: []
+      versions: []
+
+  govet:
+    check-shadowing: true
+    settings:
+      printf:
+        funcs:
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+
+  lll:
+    line-length: 120
+
+  maligned:
+    suggest-new: true
+
+  misspell:
+    locale: US
+
+  nakedret:
+    max-func-lines: 30
+
+  nestif:
+    min-complexity: 4
+
+  nolintlint:
+    allow-leading-space: true
+    allow-unused: false
+    require-explanation: false
+    require-specific: false
+
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: false
+
+  revive:
+    min-confidence: 0
+
+  rowserrcheck:
+    packages:
+      - github.com/jmoiron/sqlx
+
+  testpackage:
+    skip-regexp: (export|internal)_test\.go
+
+  unparam:
+    check-exported: false
+
+  unused:
+    check-exported: false
+
+  whitespace:
+    multi-if: false
+    multi-func: false
+
+  wsl:
+    strict-append: true
+    allow-assign-and-call: true
+    allow-multiline-assign: true
+    allow-cuddle-declarations: false
+    allow-trailing-comment: false
+    force-case-trailing-whitespace: 0
+    force-err-cuddling: false
+    allow-separated-leading-comment: false
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - exhaustive
+    - exportloopref
+    - funlen
+    - gci
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - gofmt
+    - goimports
+    - golint
+    - gomnd
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - nestif
+    - noctx
+    - nolintlint
+    - prealloc
+    - rowserrcheck
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - testpackage
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - whitespace
+    - wsl
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gomnd
+        - funlen
+        - gocyclo
+
+    - linters:
+        - lll
+      source: "^//go:generate "
+
+    - linters:
+        - gocritic
+      text: "unnecessaryDefer:"
+
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+severity:
+  default-severity: error
+  case-sensitive: false
+  rules: []
