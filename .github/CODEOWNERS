@@ -1,0 +1,176 @@
+# CODEOWNERS for k8sec-toolkit
+# 
+# This file defines who owns and reviews different parts of the codebase.
+# Each line is a file pattern followed by one or more owners.
+# 
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# =============================================================================
+# Global Default - Repository Owner
+# =============================================================================
+# Default owner for everything in the repo unless a later match takes precedence
+* @kholcomb
+
+# =============================================================================
+# Security Critical Files
+# =============================================================================
+# Security documentation and policies
+/SECURITY.md @kholcomb
+/.github/ISSUE_TEMPLATE/security_vulnerability.yml @kholcomb
+
+# Security implementation and core security modules
+/internal/security/ @kholcomb
+/internal/scanner/ @kholcomb
+/pkg/security/ @kholcomb
+
+# Authentication and authorization
+/internal/auth/ @kholcomb
+/internal/rbac/ @kholcomb
+
+# =============================================================================
+# Infrastructure & CI/CD
+# =============================================================================
+# GitHub Actions workflows - require DevOps review
+/.github/workflows/ @kholcomb
+/.github/actions/ @kholcomb
+
+# Docker and containerization
+/Dockerfile @kholcomb
+/.dockerignore @kholcomb
+/docker/ @kholcomb
+
+# Build and release automation
+/Makefile @kholcomb
+/scripts/ @kholcomb
+/.goreleaser.yml @kholcomb
+/build/ @kholcomb
+
+# Dependency management
+/go.mod @kholcomb
+/go.sum @kholcomb
+
+# =============================================================================
+# Core Application Components
+# =============================================================================
+# CLI interface and commands
+/cmd/ @kholcomb
+/internal/cli/ @kholcomb
+
+# Core tool integrations - security tools expertise needed
+/internal/tools/ @kholcomb
+
+# Configuration system
+/internal/config/ @kholcomb
+/configs/ @kholcomb
+
+# Output formatting and reporting
+/pkg/output/ @kholcomb
+/pkg/report/ @kholcomb
+/internal/formatter/ @kholcomb
+
+# Core types and interfaces
+/internal/types/ @kholcomb
+/pkg/types/ @kholcomb
+
+# =============================================================================
+# Quality Assurance & Testing
+# =============================================================================
+# Test files require testing expertise
+*_test.go @kholcomb
+/test/ @kholcomb
+/tests/ @kholcomb
+
+# Quality tools configuration
+/.golangci.yml @kholcomb
+/.pre-commit-config.yaml @kholcomb
+/.yamllint.yml @kholcomb
+/.markdownlint.json @kholcomb
+/.secrets.baseline @kholcomb
+
+# =============================================================================
+# Documentation & Compliance
+# =============================================================================
+# Main documentation files
+/README.md @kholcomb
+/CONTRIBUTING.md @kholcomb
+/CHANGELOG.md @kholcomb
+/CODE_OF_CONDUCT.md @kholcomb
+
+# License and legal
+/LICENSE @kholcomb
+/NOTICE @kholcomb
+
+# API documentation
+/docs/api/ @kholcomb
+/docs/swagger/ @kholcomb
+
+# User guides and tutorials
+/docs/user-guide/ @kholcomb
+/docs/tutorials/ @kholcomb
+/docs/examples/ @kholcomb
+
+# Architecture documentation
+/docs/architecture/ @kholcomb
+/docs/design/ @kholcomb
+
+# =============================================================================
+# Configuration Files
+# =============================================================================
+# Git configuration
+/.gitignore @kholcomb
+/.gitattributes @kholcomb
+/.gitmessage @kholcomb
+
+# Editor configuration
+/.editorconfig @kholcomb
+/.vscode/ @kholcomb
+
+# Package management
+/package.json @kholcomb
+/yarn.lock @kholcomb
+/package-lock.json @kholcomb
+
+# =============================================================================
+# GitHub Repository Configuration
+# =============================================================================
+# Issue and PR templates
+/.github/ISSUE_TEMPLATE/ @kholcomb
+/.github/PULL_REQUEST_TEMPLATE/ @kholcomb
+
+# GitHub repository settings
+/.github/dependabot.yml @kholcomb
+/.github/funding.yml @kholcomb
+/.github/stale.yml @kholcomb
+
+# This CODEOWNERS file itself
+/.github/CODEOWNERS @kholcomb
+
+# =============================================================================
+# Special Cases & Overrides
+# =============================================================================
+# Examples and demo code - broader review welcome
+/examples/ @kholcomb
+/demo/ @kholcomb
+/samples/ @kholcomb
+
+# Vendor dependencies - automated updates
+/vendor/ @kholcomb
+
+# Generated files - may need special handling
+*_generated.go @kholcomb
+*.pb.go @kholcomb
+
+# =============================================================================
+# Compliance & Audit
+# =============================================================================
+# Compliance documentation
+/docs/compliance/ @kholcomb
+/compliance/ @kholcomb
+
+# Audit and monitoring
+/internal/audit/ @kholcomb
+/pkg/audit/ @kholcomb
+
+# Security scanning configurations
+/.trivyignore @kholcomb
+/.snyk @kholcomb
