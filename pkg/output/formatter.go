@@ -71,15 +71,15 @@ func (f *TableFormatter) formatScanResult(result *types.ScanResult) string {
 
 	// Header
 	output.WriteString(fmt.Sprintf("=== K8Sec Toolkit Scan Results: %s ===\n", result.Context))
-	
+
 	// Cluster info
 	if result.ClusterInfo != nil {
-		output.WriteString(fmt.Sprintf("Cluster: %s (v%s)\n", 
+		output.WriteString(fmt.Sprintf("Cluster: %s (v%s)\n",
 			result.ClusterInfo.Name, result.ClusterInfo.Version))
 		output.WriteString(fmt.Sprintf("Nodes: %d, Namespaces: %d, Pods: %d\n",
 			result.ClusterInfo.NodeCount, result.ClusterInfo.NamespaceCount, result.ClusterInfo.PodCount))
 	}
-	
+
 	output.WriteString(fmt.Sprintf("Scan Time: %s\n", result.ScanTime.Format(time.RFC3339)))
 	output.WriteString(fmt.Sprintf("Duration: %v\n", result.Duration))
 	output.WriteString(fmt.Sprintf("Tools: %s\n", strings.Join(result.ToolsUsed, ", ")))
@@ -89,7 +89,7 @@ func (f *TableFormatter) formatScanResult(result *types.ScanResult) string {
 		output.WriteString(fmt.Sprintf("\nSummary:\n"))
 		output.WriteString(fmt.Sprintf("  Total Findings: %d\n", result.Summary.TotalFindings))
 		output.WriteString(fmt.Sprintf("  Critical: %d, High: %d, Medium: %d, Low: %d, Info: %d\n",
-			result.Summary.Critical, result.Summary.High, result.Summary.Medium, 
+			result.Summary.Critical, result.Summary.High, result.Summary.Medium,
 			result.Summary.Low, result.Summary.Info))
 		output.WriteString(fmt.Sprintf("  Risk Score: %.1f\n", result.Summary.RiskScore))
 	}
@@ -112,13 +112,13 @@ func (f *TableFormatter) formatScanResult(result *types.ScanResult) string {
 
 func (f *TableFormatter) formatFindingsTable(findings []types.SecurityFinding) string {
 	var output strings.Builder
-	
+
 	output.WriteString("\nFindings:\n")
-	
+
 	// Create table using new API
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
-	
+
 	// Set headers using new API
 	table.Header("Severity", "Type", "Resource", "Title", "Source")
 
@@ -134,7 +134,7 @@ func (f *TableFormatter) formatFindingsTable(findings []types.SecurityFinding) s
 		if finding.Resource.Namespace != "" {
 			resourceName = fmt.Sprintf("%s/%s", finding.Resource.Namespace, resourceName)
 		}
-		
+
 		// Truncate title if too long
 		title := finding.Title
 		if len(title) > 50 {
@@ -194,7 +194,7 @@ func (f *SummaryFormatter) Format(results []*types.ScanResult) ([]byte, error) {
 
 		output.WriteString(fmt.Sprintf("Context: %s\n", result.Context))
 		if result.ClusterInfo != nil {
-			output.WriteString(fmt.Sprintf("  Cluster: %s (v%s)\n", 
+			output.WriteString(fmt.Sprintf("  Cluster: %s (v%s)\n",
 				result.ClusterInfo.Name, result.ClusterInfo.Version))
 		}
 		if result.Summary != nil {
@@ -203,11 +203,11 @@ func (f *SummaryFormatter) Format(results []*types.ScanResult) ([]byte, error) {
 			output.WriteString(fmt.Sprintf("  Risk Score: %.1f\n", result.Summary.RiskScore))
 		}
 		output.WriteString(fmt.Sprintf("  Tools: %s\n", strings.Join(result.ToolsUsed, ", ")))
-		
+
 		if len(result.Errors) > 0 {
 			output.WriteString(fmt.Sprintf("  Errors: %d tool(s) failed\n", len(result.Errors)))
 		}
-		
+
 		output.WriteString("\n")
 	}
 

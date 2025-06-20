@@ -21,11 +21,13 @@ K8Sec Toolkit implements defense-in-depth security measures to protect against v
 ### 2. Input Validation and Sanitization
 
 **Implemented in**:
+
 - `internal/tools/kubescape.go` - Namespace, context, and framework validation
 - `internal/tools/trivy.go` - Severity, path, and timeout validation
 - `internal/security/executor.go` - Comprehensive argument pattern matching
 
 **Validation includes**:
+
 - Kubernetes resource name patterns (RFC 1123 compliant)
 - Path sanitization with `filepath.Clean`
 - Length limits (namespaces: 63 chars, contexts: 253 chars)
@@ -34,12 +36,14 @@ K8Sec Toolkit implements defense-in-depth security measures to protect against v
 ### 3. Binary Security
 
 **Path Validation**:
+
 - Absolute path requirements
 - Allowlisted binary names only (`trivy`, `kubescape`, `kubectl-who-can`, `kube-bench`, `polaris`)
 - File existence and permission verification
 - Protection against path traversal attacks
 
 **Runtime Checks**:
+
 - Binary integrity verification
 - Executable permission validation
 - Regular file type verification
@@ -48,6 +52,7 @@ K8Sec Toolkit implements defense-in-depth security measures to protect against v
 ### 4. Privilege Minimization
 
 **Process Isolation**:
+
 - Empty environment variables for subprocess execution
 - Timeout controls for all external commands
 - No elevated privileges required
@@ -56,12 +61,14 @@ K8Sec Toolkit implements defense-in-depth security measures to protect against v
 ### 5. Audit and Monitoring
 
 **Security Audit Trail**:
+
 - All command executions logged with `SECURITY_AUDIT` prefix
 - Command approval/denial decisions logged
 - Execution time and result tracking
 - Structured logging for SIEM integration
 
 **Log Format**:
+
 ```
 SECURITY_AUDIT: Command execution requested - Key: [command], Args: [args]
 SECURITY_AUDIT: [APPROVED|DENIED] - [reason]
@@ -89,18 +96,21 @@ SECURITY_AUDIT: Command completed [successfully|with error] - Duration: [time]
 ## Security Testing
 
 ### Unit Tests
+
 - Input validation boundary testing
 - Path traversal attempt testing
 - Malformed input handling
 - Timeout and resource limit testing
 
 ### Integration Tests
+
 - End-to-end security workflow validation
 - Tool integration security verification
 - Audit trail completeness testing
 - Error handling security verification
 
 ### Security Scanning
+
 - Static analysis with security-focused linters
 - Dependency vulnerability scanning
 - Binary security verification
@@ -113,6 +123,7 @@ SECURITY_AUDIT: Command completed [successfully|with error] - Duration: [time]
 **DO NOT** create public GitHub issues for security vulnerabilities.
 
 **Instead**:
+
 1. Email security issues to: [security@k8sec-toolkit.dev] or create a private security advisory on GitHub
 2. Include detailed reproduction steps
 3. Provide impact assessment
@@ -128,6 +139,7 @@ SECURITY_AUDIT: Command completed [successfully|with error] - Duration: [time]
 ### Security Advisories
 
 Security advisories will be published at:
+
 - Project security documentation
 - GitHub Security Advisories
 - Relevant security mailing lists
@@ -137,6 +149,7 @@ Security advisories will be published at:
 ### Code Review Requirements
 
 All code changes require:
+
 - Security-focused code review
 - Input validation verification
 - Privilege escalation assessment
@@ -145,6 +158,7 @@ All code changes require:
 ### Pre-commit Security Checks
 
 Automated security checks include:
+
 - Static analysis with security rules
 - Dependency vulnerability scanning
 - Secret detection scanning
@@ -179,6 +193,7 @@ Automated security checks include:
 ### Security Monitoring
 
 Recommended monitoring:
+
 - Command execution patterns
 - Unusual binary access attempts
 - Failed validation attempts
@@ -188,6 +203,7 @@ Recommended monitoring:
 ## Security Compliance
 
 K8Sec Toolkit security measures align with:
+
 - **OWASP Top 10** - Input validation, injection prevention
 - **CIS Security Guidelines** - Secure configuration practices
 - **NIST Cybersecurity Framework** - Defense-in-depth implementation
@@ -215,6 +231,7 @@ K8Sec Toolkit security measures align with:
 ### Security Research
 
 Active research areas:
+
 - Zero-trust security architecture
 - Hardware security module integration
 - Formal verification of security properties
@@ -222,6 +239,6 @@ Active research areas:
 
 ---
 
-**Last Updated**: 2025-06-20  
-**Security Version**: 2.0  
+**Last Updated**: 2025-06-20
+**Security Version**: 2.0
 **Next Review**: 2025-09-20

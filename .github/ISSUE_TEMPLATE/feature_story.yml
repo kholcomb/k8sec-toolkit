@@ -2,14 +2,14 @@ name: 🚀 Feature Story
 description: Create a new feature story for development
 title: "[FEATURE] "
 labels: ["type/feature", "status/todo", "claude-code/ready"]
-projects: ["kubesec-io/1"]
+projects: ["kholcomb/1"]
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
         ## 🎯 Feature Story Template
-        
+
         Use this template to create structured feature stories that can be easily picked up by Claude Code or team members.
 
   - type: input
@@ -30,7 +30,7 @@ body:
         **As a** [user type]
         **I want** [functionality]
         **So that** [benefit/value]
-        
+
         ### Acceptance Criteria
         - [ ] Criterion 1
         - [ ] Criterion 2
@@ -45,11 +45,11 @@ body:
       description: Technical specifications and constraints
       placeholder: |
         ### Architecture Considerations
-        - Component affected: 
+        - Component affected:
         - New dependencies:
         - Performance requirements:
         - Security considerations:
-        
+
         ### Implementation Notes
         - API changes:
         - Database changes:
@@ -130,7 +130,7 @@ body:
         - Relates to #
         - Blocks #
         - Blocked by #
-        
+
         ### Dependencies
         - External dependency:
         - Internal dependency:
@@ -142,23 +142,23 @@ body:
       description: Additional context for Claude Code pickup
       placeholder: |
         ### For Claude Code Implementation
-        
+
         **Key Files to Review:**
-        - 
-        - 
-        
+        -
+        -
+
         **Architecture Decisions:**
-        - 
-        - 
-        
+        -
+        -
+
         **Testing Strategy:**
-        - 
-        
+        -
+
         **Security Considerations:**
-        - 
-        
+        -
+
         **Integration Points:**
-        - 
+        -
 
   - type: checkboxes
     id: prerequisites
@@ -177,14 +177,14 @@ body:
     attributes:
       value: |
         ---
-        
+
         ## 📋 Next Steps
-        
+
         1. **Triage**: Product owner will review and prioritize
         2. **Planning**: Technical lead will review architecture
         3. **Assignment**: Story will be assigned to developer or Claude Code
         4. **Implementation**: Development begins following technical requirements
         5. **Review**: Code review and testing phases
         6. **Deployment**: Production deployment following CI/CD pipeline
-        
+
         **Note for Claude Code**: This story format is optimized for AI pickup with all necessary context and clear acceptance criteria.

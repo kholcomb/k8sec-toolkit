@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	"k8s.io/client-go/kubernetes"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionsclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 )
 
@@ -22,17 +22,17 @@ type CRDDiscovery struct {
 
 // CRDInfo contains information about a discovered CRD
 type CRDInfo struct {
-	Name               string                 `json:"name"`
-	Group              string                 `json:"group"`
-	Version            string                 `json:"version"`
-	Kind               string                 `json:"kind"`
-	Scope              string                 `json:"scope"`
-	SecurityRelevant   bool                   `json:"security_relevant"`
-	OperatorManaged    bool                   `json:"operator_managed"`
-	Description        string                 `json:"description"`
-	ResourceCount      int                    `json:"resource_count"`
-	Annotations        map[string]string      `json:"annotations"`
-	Labels             map[string]string      `json:"labels"`
+	Name             string            `json:"name"`
+	Group            string            `json:"group"`
+	Version          string            `json:"version"`
+	Kind             string            `json:"kind"`
+	Scope            string            `json:"scope"`
+	SecurityRelevant bool              `json:"security_relevant"`
+	OperatorManaged  bool              `json:"operator_managed"`
+	Description      string            `json:"description"`
+	ResourceCount    int               `json:"resource_count"`
+	Annotations      map[string]string `json:"annotations"`
+	Labels           map[string]string `json:"labels"`
 }
 
 // SecurityRelevantCRDs contains patterns for identifying security-relevant CRDs
@@ -40,28 +40,28 @@ var SecurityRelevantCRDs = []string{
 	// Service Mesh
 	"virtualservices", "destinationrules", "gateways", "serviceentries",
 	"authorizationpolicies", "peerauthentications", "requestauthentications",
-	
+
 	// Security Tools
 	"networkpolicies", "podsecuritypolicies", "securitycontextconstraints",
 	"certificates", "issuers", "clusterissuers", "certificaterequests",
 	"constrainttemplates", "configs", "constraints",
-	
+
 	// Policy Engines
 	"policies", "clusterpolicies", "policyreports", "clusterpolicyreports",
 	"admissionpolicies", "validatingadmissionpolicies",
-	
+
 	// Secret Management
 	"secretstores", "externalsecrets", "secretproviderclasses",
 	"vaultconnections", "vaultauths", "vaultdynamicsecrets",
-	
+
 	// Monitoring & Security
 	"prometheusrules", "servicemonitors", "podmonitors",
 	"falcoevents", "falcorules", "falcosidekicks",
-	
+
 	// Identity & Access
 	"serviceaccounts", "clusterroles", "roles", "rolebindings", "clusterrolebindings",
 	"oidcidentityproviders", "ldapidentityproviders",
-	
+
 	// Container Security
 	"imagestreams", "images", "vulnerabilityreports", "configauditreports",
 	"rbacassessmentreports", "infraassessmentreports",
@@ -103,7 +103,7 @@ func (c *CRDDiscovery) DiscoverCRDs(ctx context.Context) ([]CRDInfo, error) {
 		crdInfos = append(crdInfos, info)
 	}
 
-	c.logger.Infof("Discovered %d CRDs (%d security-relevant)", 
+	c.logger.Infof("Discovered %d CRDs (%d security-relevant)",
 		len(crdInfos), c.countSecurityRelevant(crdInfos))
 
 	return crdInfos, nil
@@ -135,7 +135,7 @@ func (c *CRDDiscovery) analyzeCRD(crd *apiextensionsv1.CustomResourceDefinition)
 
 	// Check if security relevant
 	info.SecurityRelevant = c.isSecurityRelevant(crd)
-	
+
 	// Check if operator managed
 	info.OperatorManaged = c.isOperatorManaged(crd)
 
@@ -158,9 +158,9 @@ func (c *CRDDiscovery) isSecurityRelevant(crd *apiextensionsv1.CustomResourceDef
 
 	// Check against known security-relevant patterns
 	for _, pattern := range SecurityRelevantCRDs {
-		if strings.Contains(crdName, pattern) || 
-		   strings.Contains(kind, pattern) ||
-		   strings.Contains(group, pattern) {
+		if strings.Contains(crdName, pattern) ||
+			strings.Contains(kind, pattern) ||
+			strings.Contains(group, pattern) {
 			return true
 		}
 	}
@@ -170,7 +170,7 @@ func (c *CRDDiscovery) isSecurityRelevant(crd *apiextensionsv1.CustomResourceDef
 		for key, value := range annotations {
 			keyLower := strings.ToLower(key)
 			valueLower := strings.ToLower(value)
-			
+
 			securityKeywords := []string{"security", "policy", "rbac", "auth", "cert", "secret", "vulnerability"}
 			for _, keyword := range securityKeywords {
 				if strings.Contains(keyLower, keyword) || strings.Contains(valueLower, keyword) {
@@ -184,9 +184,9 @@ func (c *CRDDiscovery) isSecurityRelevant(crd *apiextensionsv1.CustomResourceDef
 	if categories := crd.Spec.Names.Categories; categories != nil {
 		for _, category := range categories {
 			categoryLower := strings.ToLower(category)
-			if strings.Contains(categoryLower, "security") || 
-			   strings.Contains(categoryLower, "policy") ||
-			   strings.Contains(categoryLower, "auth") {
+			if strings.Contains(categoryLower, "security") ||
+				strings.Contains(categoryLower, "policy") ||
+				strings.Contains(categoryLower, "auth") {
 				return true
 			}
 		}
@@ -198,7 +198,7 @@ func (c *CRDDiscovery) isSecurityRelevant(crd *apiextensionsv1.CustomResourceDef
 // isOperatorManaged determines if a CRD is managed by an operator
 func (c *CRDDiscovery) isOperatorManaged(crd *apiextensionsv1.CustomResourceDefinition) bool {
 	crdName := strings.ToLower(crd.Name)
-	
+
 	// Check against operator patterns
 	for _, pattern := range OperatorPatterns {
 		if strings.Contains(crdName, pattern) {
@@ -214,7 +214,7 @@ func (c *CRDDiscovery) isOperatorManaged(crd *apiextensionsv1.CustomResourceDefi
 			"operator.openshift.io",
 			"charts.helm.sh",
 		}
-		
+
 		for _, opAnnotation := range operatorAnnotations {
 			for key := range annotations {
 				if strings.Contains(key, opAnnotation) {
@@ -231,7 +231,7 @@ func (c *CRDDiscovery) isOperatorManaged(crd *apiextensionsv1.CustomResourceDefi
 			"olm.operatorframework.io",
 			"app.kubernetes.io/managed-by",
 		}
-		
+
 		for _, opLabel := range operatorLabels {
 			for key, value := range labels {
 				if strings.Contains(key, opLabel) || strings.Contains(value, "operator") {
@@ -248,7 +248,7 @@ func (c *CRDDiscovery) isOperatorManaged(crd *apiextensionsv1.CustomResourceDefi
 func (c *CRDDiscovery) countCustomResources(crd *apiextensionsv1.CustomResourceDefinition) int {
 	// This is a basic implementation - in practice, we'd need to use dynamic client
 	// to properly enumerate custom resources
-	
+
 	// For now, return 0 as placeholder
 	// TODO: Implement dynamic client-based resource counting
 	return 0
@@ -290,23 +290,23 @@ func (c *CRDDiscovery) GetOperatorManagedCRDs(crdInfos []CRDInfo) []CRDInfo {
 // GenerateCRDSecurityReport generates a security report for discovered CRDs
 func (c *CRDDiscovery) GenerateCRDSecurityReport(crdInfos []CRDInfo) map[string]interface{} {
 	report := make(map[string]interface{})
-	
+
 	total := len(crdInfos)
 	securityRelevant := len(c.GetSecurityRelevantCRDs(crdInfos))
 	operatorManaged := len(c.GetOperatorManagedCRDs(crdInfos))
-	
+
 	report["total_crds"] = total
 	report["security_relevant"] = securityRelevant
 	report["operator_managed"] = operatorManaged
 	report["security_coverage"] = float64(securityRelevant) / float64(total) * 100
-	
+
 	// Group by category
 	groupCounts := make(map[string]int)
 	for _, info := range crdInfos {
 		groupCounts[info.Group]++
 	}
 	report["groups"] = groupCounts
-	
+
 	// Identify high-priority security CRDs
 	highPriorityCRDs := make([]string, 0)
 	for _, info := range crdInfos {
@@ -323,6 +323,6 @@ func (c *CRDDiscovery) GenerateCRDSecurityReport(crdInfos []CRDInfo) map[string]
 		}
 	}
 	report["high_priority_security_crds"] = highPriorityCRDs
-	
+
 	return report
 }

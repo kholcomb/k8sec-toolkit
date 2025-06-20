@@ -7,14 +7,14 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/kholcomb/k8sec-toolkit/internal/config"
-	"github.com/kholcomb/k8sec-toolkit/internal/types"
 	"github.com/kholcomb/k8sec-toolkit/internal/tools"
+	"github.com/kholcomb/k8sec-toolkit/internal/types"
 	apiextensionsclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 )
 
@@ -64,7 +64,7 @@ func (s *Scanner) initializeTools() {
 
 	// TODO: Initialize other tools (kube-bench, rbac, polaris)
 	// For MVP, we focus on Trivy + Kubescape
-	
+
 	s.logger.Infof("Initialized %d security tools", len(s.tools))
 }
 
@@ -81,7 +81,7 @@ func (s *Scanner) isToolEnabled(toolName string) bool {
 // ScanContext scans a specific Kubernetes context
 func (s *Scanner) ScanContext(ctx context.Context, contextName string) (*ScanResult, error) {
 	startTime := time.Now()
-	
+
 	s.logger.Infof("Starting scan of context: %s", contextName)
 
 	// Create Kubernetes client
@@ -101,7 +101,7 @@ func (s *Scanner) ScanContext(ctx context.Context, contextName string) (*ScanRes
 		s.logger.WithError(err).Warn("Failed to discover CRDs")
 		crds = []CRDInfo{} // Continue without CRD info
 	} else {
-		s.logger.Infof("Discovered %d CRDs (%d security-relevant)", 
+		s.logger.Infof("Discovered %d CRDs (%d security-relevant)",
 			len(crds), s.countSecurityRelevantCRDs(crds))
 	}
 
@@ -133,7 +133,7 @@ func (s *Scanner) ScanContext(ctx context.Context, contextName string) (*ScanRes
 		Errors:      errors,
 	}
 
-	s.logger.Infof("Scan completed in %v with %d findings", 
+	s.logger.Infof("Scan completed in %v with %d findings",
 		result.Duration, len(result.Findings))
 
 	return result, nil
@@ -200,19 +200,19 @@ func (s *Scanner) getClusterInfo(client kubernetes.Interface) (*types.ClusterInf
 	}
 
 	// Get basic resource counts
-	namespaces, err := client.CoreV1().Namespaces().List(context.TODO(), 
+	namespaces, err := client.CoreV1().Namespaces().List(context.TODO(),
 		metav1.ListOptions{})
 	if err != nil {
 		s.logger.WithError(err).Warn("Failed to get namespace count")
 	}
 
-	pods, err := client.CoreV1().Pods("").List(context.TODO(), 
+	pods, err := client.CoreV1().Pods("").List(context.TODO(),
 		metav1.ListOptions{})
 	if err != nil {
 		s.logger.WithError(err).Warn("Failed to get pod count")
 	}
 
-	nodes, err := client.CoreV1().Nodes().List(context.TODO(), 
+	nodes, err := client.CoreV1().Nodes().List(context.TODO(),
 		metav1.ListOptions{})
 	if err != nil {
 		s.logger.WithError(err).Warn("Failed to get node count")
@@ -252,52 +252,52 @@ func (s *Scanner) prepareToolConfig(contextName string) types.ToolConfig {
 // executeTools executes all configured security tools
 func (s *Scanner) executeTools(ctx context.Context, toolConfig types.ToolConfig) (
 	map[string]*types.ToolResult, map[string]error) {
-	
+
 	if s.config.Scan.Parallel {
 		return s.executeToolsParallel(ctx, toolConfig)
 	}
-	
+
 	return s.executeToolsSequential(ctx, toolConfig)
 }
 
 // executeToolsParallel executes tools in parallel
 func (s *Scanner) executeToolsParallel(ctx context.Context, toolConfig types.ToolConfig) (
 	map[string]*types.ToolResult, map[string]error) {
-	
+
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	
+
 	toolResults := make(map[string]*types.ToolResult)
 	errors := make(map[string]error)
-	
+
 	// Create semaphore for concurrency control
 	semaphore := make(chan struct{}, s.config.Scan.MaxConcurrency)
-	
+
 	for toolName, tool := range s.tools {
 		wg.Add(1)
 		go func(name string, t types.SecurityTool) {
 			defer wg.Done()
-			
+
 			// Acquire semaphore
 			semaphore <- struct{}{}
 			defer func() { <-semaphore }()
-			
+
 			s.logger.Infof("Executing tool: %s", name)
 			result, err := t.Execute(ctx, toolConfig)
-			
+
 			mu.Lock()
 			if err != nil {
 				errors[name] = err
 				s.logger.WithError(err).Errorf("Tool %s failed", name)
 			} else {
 				toolResults[name] = result
-				s.logger.Infof("Tool %s completed with %d findings", 
+				s.logger.Infof("Tool %s completed with %d findings",
 					name, len(result.Findings))
 			}
 			mu.Unlock()
 		}(toolName, tool)
 	}
-	
+
 	wg.Wait()
 	return toolResults, errors
 }
@@ -305,37 +305,37 @@ func (s *Scanner) executeToolsParallel(ctx context.Context, toolConfig types.Too
 // executeToolsSequential executes tools sequentially
 func (s *Scanner) executeToolsSequential(ctx context.Context, toolConfig types.ToolConfig) (
 	map[string]*types.ToolResult, map[string]error) {
-	
+
 	toolResults := make(map[string]*types.ToolResult)
 	errors := make(map[string]error)
-	
+
 	for toolName, tool := range s.tools {
 		s.logger.Infof("Executing tool: %s", toolName)
 		result, err := tool.Execute(ctx, toolConfig)
-		
+
 		if err != nil {
 			errors[toolName] = err
 			s.logger.WithError(err).Errorf("Tool %s failed", toolName)
 		} else {
 			toolResults[toolName] = result
-			s.logger.Infof("Tool %s completed with %d findings", 
+			s.logger.Infof("Tool %s completed with %d findings",
 				toolName, len(result.Findings))
 		}
 	}
-	
+
 	return toolResults, errors
 }
 
 // aggregateFindings combines findings from all tools
 func (s *Scanner) aggregateFindings(toolResults map[string]*types.ToolResult) []types.SecurityFinding {
 	var allFindings []types.SecurityFinding
-	
+
 	for _, result := range toolResults {
 		allFindings = append(allFindings, result.Findings...)
 	}
-	
+
 	// TODO: Implement deduplication logic
-	
+
 	return allFindings
 }
 
@@ -347,7 +347,7 @@ func (s *Scanner) generateSummary(findings []types.SecurityFinding) *types.Findi
 		ByType:        make(map[string]int),
 		BySource:      make(map[string]int),
 	}
-	
+
 	for _, finding := range findings {
 		// Count by severity
 		summary.BySeverity[finding.Severity]++
@@ -363,17 +363,17 @@ func (s *Scanner) generateSummary(findings []types.SecurityFinding) *types.Findi
 		case string(types.SeverityInfo):
 			summary.Info++
 		}
-		
+
 		// Count by type
 		summary.ByType[finding.Type]++
-		
+
 		// Count by source
 		summary.BySource[finding.Source]++
 	}
-	
+
 	// Calculate risk score (simple algorithm for now)
-	summary.RiskScore = float64(summary.Critical*10 + summary.High*5 + summary.Medium*2 + summary.Low*1) / 10.0
-	
+	summary.RiskScore = float64(summary.Critical*10+summary.High*5+summary.Medium*2+summary.Low*1) / 10.0
+
 	return summary
 }
 

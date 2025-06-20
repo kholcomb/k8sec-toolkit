@@ -11,9 +11,9 @@ import (
 
 func createTestScanResult() *types.ScanResult {
 	return &types.ScanResult{
-		Context:  "test-context",
-		ScanTime: time.Now(),
-		Duration: 5 * time.Minute,
+		Context:   "test-context",
+		ScanTime:  time.Now(),
+		Duration:  5 * time.Minute,
 		ToolsUsed: []string{"trivy", "kubescape"},
 		ClusterInfo: &types.ClusterInfo{
 			Name:           "test-cluster",
@@ -44,8 +44,8 @@ func createTestScanResult() *types.ScanResult {
 			Critical:      1,
 			High:          0,
 			Medium:        0,
-			Low:          0,
-			RiskScore:    9.8,
+			Low:           0,
+			RiskScore:     9.8,
 		},
 	}
 }
@@ -53,18 +53,18 @@ func createTestScanResult() *types.ScanResult {
 func TestJSONFormatter(t *testing.T) {
 	formatter := &JSONFormatter{}
 	result := createTestScanResult()
-	
+
 	data, err := formatter.Format([]*types.ScanResult{result})
 	if err != nil {
 		t.Fatalf("JSON formatting failed: %v", err)
 	}
-	
+
 	// Validate it's valid JSON
 	var parsed map[string]interface{}
 	if err := json.Unmarshal(data, &parsed); err != nil {
 		t.Fatalf("Generated JSON is invalid: %v", err)
 	}
-	
+
 	// Check key fields
 	if parsed["context"] != "test-context" {
 		t.Error("JSON should contain context field")
@@ -74,14 +74,14 @@ func TestJSONFormatter(t *testing.T) {
 func TestTableFormatter(t *testing.T) {
 	formatter := &TableFormatter{}
 	result := createTestScanResult()
-	
+
 	data, err := formatter.Format([]*types.ScanResult{result})
 	if err != nil {
 		t.Fatalf("Table formatting failed: %v", err)
 	}
-	
+
 	output := string(data)
-	
+
 	// Check for expected sections
 	expectedSections := []string{
 		"K8Sec Toolkit Scan Results",
@@ -91,7 +91,7 @@ func TestTableFormatter(t *testing.T) {
 		"Total Findings: 1",
 		"Critical: 1",
 	}
-	
+
 	for _, section := range expectedSections {
 		if !strings.Contains(output, section) {
 			t.Errorf("Table output should contain '%s'", section)
@@ -102,14 +102,14 @@ func TestTableFormatter(t *testing.T) {
 func TestSummaryFormatter(t *testing.T) {
 	formatter := &SummaryFormatter{}
 	result := createTestScanResult()
-	
+
 	data, err := formatter.Format([]*types.ScanResult{result})
 	if err != nil {
 		t.Fatalf("Summary formatting failed: %v", err)
 	}
-	
+
 	output := string(data)
-	
+
 	// Check for expected content
 	expectedContent := []string{
 		"K8Sec Toolkit Security Scan Summary",
@@ -118,7 +118,7 @@ func TestSummaryFormatter(t *testing.T) {
 		"Findings: 1",
 		"Critical: 1",
 	}
-	
+
 	for _, content := range expectedContent {
 		if !strings.Contains(output, content) {
 			t.Errorf("Summary output should contain '%s'", content)
@@ -137,10 +137,10 @@ func TestNewFormatter(t *testing.T) {
 		{"summary", false},
 		{"invalid", true},
 	}
-	
+
 	for _, tc := range testCases {
 		formatter, err := NewFormatter(tc.format)
-		
+
 		if tc.expectErr {
 			if err == nil {
 				t.Errorf("Expected error for format '%s'", tc.format)

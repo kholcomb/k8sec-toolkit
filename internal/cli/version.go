@@ -26,7 +26,7 @@ func showVersion(version, gitCommit, buildTime string) {
 	fmt.Printf("Built: %s\n", buildTime)
 	fmt.Printf("Go version: %s\n", runtime.Version())
 	fmt.Printf("OS/Arch: %s/%s\n", runtime.GOOS, runtime.GOARCH)
-	
+
 	// TODO: Add embedded tool versions
 	fmt.Printf("\nEmbedded Tools:\n")
 	fmt.Printf("  Trivy: (version will be detected)\n")

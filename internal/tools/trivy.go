@@ -32,35 +32,35 @@ type TrivyKubernetesReport struct {
 
 // TrivyResourceResult represents a single resource scan result
 type TrivyResourceResult struct {
-	Namespace       string                 `json:"Namespace"`
-	Kind            string                 `json:"Kind"`
-	Name            string                 `json:"Name"`
-	Results         []TrivyVulnResult     `json:"Results"`
-	Misconfigurations []TrivyMisconfig     `json:"Misconfigurations"`
-	Metadata        []interface{} `json:"Metadata"`
+	Namespace         string            `json:"Namespace"`
+	Kind              string            `json:"Kind"`
+	Name              string            `json:"Name"`
+	Results           []TrivyVulnResult `json:"Results"`
+	Misconfigurations []TrivyMisconfig  `json:"Misconfigurations"`
+	Metadata          []interface{}     `json:"Metadata"`
 }
 
 // TrivyVulnResult represents vulnerability scan results
 type TrivyVulnResult struct {
-	Target          string                `json:"Target"`
-	Class           string                `json:"Class"`
-	Type            string                `json:"Type"`
+	Target          string               `json:"Target"`
+	Class           string               `json:"Class"`
+	Type            string               `json:"Type"`
 	Vulnerabilities []TrivyVulnerability `json:"Vulnerabilities"`
 }
 
 // TrivyVulnerability represents a single vulnerability
 type TrivyVulnerability struct {
-	VulnerabilityID  string             `json:"VulnerabilityID"`
-	PkgName          string             `json:"PkgName"`
-	InstalledVersion string             `json:"InstalledVersion"`
-	FixedVersion     string             `json:"FixedVersion"`
-	Severity         string             `json:"Severity"`
-	Title            string             `json:"Title"`
-	Description      string             `json:"Description"`
-	References       []string           `json:"References"`
-	CVSS             TrivyCVSS          `json:"CVSS"`
-	CweIDs           []string           `json:"CweIDs"`
-	VendorSeverity   map[string]int     `json:"VendorSeverity"`
+	VulnerabilityID  string         `json:"VulnerabilityID"`
+	PkgName          string         `json:"PkgName"`
+	InstalledVersion string         `json:"InstalledVersion"`
+	FixedVersion     string         `json:"FixedVersion"`
+	Severity         string         `json:"Severity"`
+	Title            string         `json:"Title"`
+	Description      string         `json:"Description"`
+	References       []string       `json:"References"`
+	CVSS             TrivyCVSS      `json:"CVSS"`
+	CweIDs           []string       `json:"CweIDs"`
+	VendorSeverity   map[string]int `json:"VendorSeverity"`
 }
 
 // TrivyCVSS represents CVSS scoring information
@@ -122,11 +122,11 @@ func (t *TrivyWrapper) Validate() error {
 	if err != nil {
 		return fmt.Errorf("trivy validation failed: %w", err)
 	}
-	
+
 	if result.ExitCode != 0 {
 		return fmt.Errorf("trivy version check failed with exit code %d", result.ExitCode)
 	}
-	
+
 	t.logger.Info("Trivy validation successful")
 	return nil
 }
@@ -134,7 +134,7 @@ func (t *TrivyWrapper) Validate() error {
 // Execute runs Trivy with the given configuration
 func (t *TrivyWrapper) Execute(ctx context.Context, config types.ToolConfig) (*types.ToolResult, error) {
 	startTime := time.Now()
-	
+
 	t.logger.Info("Starting Trivy Kubernetes scan")
 
 	// Build command arguments
@@ -145,13 +145,13 @@ func (t *TrivyWrapper) Execute(ctx context.Context, config types.ToolConfig) (*t
 	duration := time.Since(startTime)
 
 	result := &types.ToolResult{
-		ToolName:   "trivy",
-		ExecutedAt: startTime,
-		Duration:   duration,
-		ExitCode:   execResult.ExitCode,
-		RawOutput:  execResult.Stdout,
+		ToolName:    "trivy",
+		ExecutedAt:  startTime,
+		Duration:    duration,
+		ExitCode:    execResult.ExitCode,
+		RawOutput:   execResult.Stdout,
 		ErrorOutput: execResult.Stderr,
-		Metadata:   map[string]interface{}{
+		Metadata: map[string]interface{}{
 			"audit_trail": execResult.AuditTrail,
 		},
 	}
@@ -167,7 +167,7 @@ func (t *TrivyWrapper) Execute(ctx context.Context, config types.ToolConfig) (*t
 	}
 
 	result.Findings = findings
-	t.logger.Infof("Trivy scan completed with %d findings in %v", 
+	t.logger.Infof("Trivy scan completed with %d findings in %v",
 		len(findings), duration)
 
 	return result, nil
@@ -266,14 +266,14 @@ func (t *TrivyWrapper) vulnerabilityToFinding(vuln TrivyVulnerability, resource 
 			Name:      resource.Name,
 			Namespace: resource.Namespace,
 		},
-		CVE:         vuln.VulnerabilityID,
-		CVSS:        cvssScore,
-		FixedIn:     vuln.FixedVersion,
+		CVE:     vuln.VulnerabilityID,
+		CVSS:    cvssScore,
+		FixedIn: vuln.FixedVersion,
 		Evidence: map[string]interface{}{
 			"package":           vuln.PkgName,
 			"installed_version": vuln.InstalledVersion,
 			"fixed_version":     vuln.FixedVersion,
-			"cwe_ids":          vuln.CweIDs,
+			"cwe_ids":           vuln.CweIDs,
 		},
 		References: vuln.References,
 		Timestamp:  time.Now(),
@@ -322,13 +322,13 @@ func (t *TrivyWrapper) normalizeSeverity(severity string) string {
 // UpdateDatabase updates Trivy's vulnerability database
 func (t *TrivyWrapper) UpdateDatabase() error {
 	t.logger.Info("Updating Trivy database")
-	
+
 	// Execute update using secure executor
 	result, err := t.executor.Execute(context.Background(), "trivy-update", []string{"image", "--download-db-only"})
 	if err != nil {
 		return fmt.Errorf("failed to update trivy database: %w", err)
 	}
-	
+
 	if result.ExitCode != 0 {
 		return fmt.Errorf("trivy database update failed with exit code %d", result.ExitCode)
 	}
@@ -345,7 +345,7 @@ func (t *TrivyWrapper) GetVersion() string {
 		t.logger.Warnf("Version check failed: %v", err)
 		return "unknown"
 	}
-	
+
 	if result.ExitCode != 0 {
 		return "unknown"
 	}

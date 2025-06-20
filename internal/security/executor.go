@@ -45,14 +45,14 @@ type ExecutionContext struct {
 
 // ExecutionResult contains the result of secure command execution
 type ExecutionResult struct {
-	Command     string
-	Arguments   []string
-	ExitCode    int
-	Stdout      []byte
-	Stderr      []byte
-	Duration    time.Duration
-	Error       error
-	AuditTrail  string
+	Command    string
+	Arguments  []string
+	ExitCode   int
+	Stdout     []byte
+	Stderr     []byte
+	Duration   time.Duration
+	Error      error
+	AuditTrail string
 }
 
 // NewSecureExecutor creates a new secure executor instance
@@ -182,7 +182,7 @@ var commandRegistry = map[string]CommandTemplate{
 // Execute securely executes a pre-approved command with validation
 func (se *SecureExecutor) Execute(ctx context.Context, commandKey string, args []string) (*ExecutionResult, error) {
 	startTime := time.Now()
-	
+
 	// Audit log entry
 	auditEntry := fmt.Sprintf("SECURITY_AUDIT: Command execution requested - Key: %s, Args: %v", commandKey, args)
 	se.logger.Info(auditEntry)
@@ -237,11 +237,11 @@ func (se *SecureExecutor) Execute(ctx context.Context, commandKey string, args [
 	duration := time.Since(startTime)
 
 	result := &ExecutionResult{
-		Command:   commandKey,
-		Arguments: args,
-		ExitCode:  cmd.ProcessState.ExitCode(),
-		Stdout:    stdout,
-		Duration:  duration,
+		Command:    commandKey,
+		Arguments:  args,
+		ExitCode:   cmd.ProcessState.ExitCode(),
+		Stdout:     stdout,
+		Duration:   duration,
 		AuditTrail: fmt.Sprintf("%s - APPROVED and EXECUTED in %v", auditEntry, duration),
 	}
 
@@ -266,7 +266,7 @@ func (se *SecureExecutor) validateBinaryPath(template CommandTemplate) (string, 
 		if !filepath.IsAbs(allowedPath) {
 			continue
 		}
-		
+
 		// Check if file exists and is executable
 		if info, err := os.Stat(allowedPath); err == nil {
 			if info.Mode().IsRegular() && info.Mode().Perm()&0111 != 0 {
@@ -282,7 +282,7 @@ func (se *SecureExecutor) validateBinaryPath(template CommandTemplate) (string, 
 	// If no direct path found, try PATH lookup with validation
 	if pathBinary, err := exec.LookPath(template.BinaryName); err == nil {
 		cleanPath := filepath.Clean(pathBinary)
-		
+
 		// Verify it's in our allowed paths or matches expected patterns
 		for _, allowedPath := range template.BinaryPaths {
 			if cleanPath == allowedPath {
@@ -290,7 +290,7 @@ func (se *SecureExecutor) validateBinaryPath(template CommandTemplate) (string, 
 				return cleanPath, nil
 			}
 		}
-		
+
 		// Additional security check: verify binary signature/checksum in production
 		// For now, we accept PATH lookups that match our naming requirements
 		if filepath.Base(cleanPath) == template.BinaryName {
@@ -317,7 +317,7 @@ func (se *SecureExecutor) validateArguments(args []string, patterns []ArgumentPa
 	// Validate each argument against patterns
 	for i, arg := range args {
 		validated := false
-		
+
 		for _, pattern := range patterns {
 			if pattern.Pattern.MatchString(arg) {
 				validated = true
@@ -325,7 +325,7 @@ func (se *SecureExecutor) validateArguments(args []string, patterns []ArgumentPa
 				break
 			}
 		}
-		
+
 		if !validated {
 			return fmt.Errorf("argument %d ('%s') does not match any allowed pattern", i, arg)
 		}

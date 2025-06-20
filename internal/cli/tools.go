@@ -134,7 +134,7 @@ func runToolsStatus(cmd *cobra.Command, args []string) error {
 
 	// TODO: Implement actual tool status checking
 	tools := []string{"trivy", "kubescape", "kube-bench", "rbac", "polaris"}
-	
+
 	for _, tool := range tools {
 		fmt.Printf("• %s: ", tool)
 		// TODO: Check actual tool status
@@ -151,7 +151,7 @@ func runToolsUpdate(cmd *cobra.Command, args []string) error {
 
 	// TODO: Implement actual database updates
 	tools := []string{"trivy", "kubescape"}
-	
+
 	for _, tool := range tools {
 		fmt.Printf("Updating %s database... ", tool)
 		// TODO: Implement actual update logic
