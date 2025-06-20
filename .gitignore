@@ -4,8 +4,8 @@
 *.dll
 *.so
 *.dylib
-kubesec
-kubesec-*
+k8sec-toolkit
+k8sec-toolkit-*
 
 # Test binary, built with `go test -c`
 *.test
