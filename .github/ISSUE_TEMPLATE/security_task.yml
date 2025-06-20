@@ -1,0 +1,256 @@
+name: 🔒 Security Task
+description: Security-related task or vulnerability
+title: "[SECURITY] "
+labels: ["type/security", "status/todo", "priority/high", "claude-code/ready"]
+projects: ["kubesec-io/1"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔒 Security Task Template
+        
+        Use this template for security-related tasks, vulnerability fixes, or security enhancements.
+        
+        **⚠️ Security Notice**: For security vulnerabilities, follow responsible disclosure. Do NOT include sensitive details in public issues.
+
+  - type: dropdown
+    id: security_type
+    attributes:
+      label: Security Task Type
+      description: Category of security work
+      options:
+        - vulnerability/fix
+        - security/enhancement
+        - security/audit
+        - security/compliance
+        - security/dependency
+        - security/configuration
+      default: 1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Security Severity
+      description: Security impact level
+      options:
+        - severity/critical
+        - severity/high
+        - severity/medium
+        - severity/low
+        - severity/info
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: security_description
+    attributes:
+      label: Security Issue Description
+      description: Detailed description of the security concern
+      placeholder: |
+        ### Security Issue Summary
+        - What is the security concern?
+        - Which components are affected?
+        - What is the potential impact?
+        
+        ### Technical Details
+        - Vulnerability type: [injection/exposure/etc]
+        - Attack vector: [network/local/etc]
+        - Components affected: [list files/modules]
+        
+        **Note**: Avoid including exploit details in public issues
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cvss_score
+    attributes:
+      label: CVSS Score (if applicable)
+      description: Common Vulnerability Scoring System score
+      options:
+        - "N/A"
+        - "0.0-3.9 (Low)"
+        - "4.0-6.9 (Medium)"  
+        - "7.0-8.9 (High)"
+        - "9.0-10.0 (Critical)"
+      default: 0
+    validations:
+      required: false
+
+  - type: textarea
+    id: affected_components
+    attributes:
+      label: Affected Components
+      description: Which parts of the system are impacted
+      placeholder: |
+        ### Code Components
+        - File: `internal/security/executor.go`
+        - Function: `validateArguments()`
+        - Line numbers: 123-145
+        
+        ### Dependencies
+        - Package: `github.com/example/package`
+        - Version: `v1.2.3`
+        
+        ### Configuration
+        - Config files: `.golangci.yml`
+        - Environment variables: `KUBESEC_*`
+    validations:
+      required: true
+
+  - type: textarea
+    id: security_requirements
+    attributes:
+      label: Security Requirements
+      description: What security measures need to be implemented
+      placeholder: |
+        ### Security Controls Required
+        - [ ] Input validation enhancement
+        - [ ] Access control implementation
+        - [ ] Audit logging addition
+        - [ ] Encryption implementation
+        - [ ] Secure configuration
+        
+        ### Compliance Requirements
+        - [ ] OWASP compliance
+        - [ ] CIS benchmark alignment
+        - [ ] SOC 2 requirement
+        - [ ] Industry standard compliance
+        
+        ### Testing Requirements
+        - [ ] Security unit tests
+        - [ ] Penetration testing
+        - [ ] Vulnerability scanning
+        - [ ] Code security review
+    validations:
+      required: true
+
+  - type: textarea
+    id: remediation_steps
+    attributes:
+      label: Remediation Plan
+      description: Proposed steps to address the security issue
+      placeholder: |
+        ### Immediate Actions (if critical)
+        1. Temporary mitigation:
+        2. Risk assessment:
+        3. Communication plan:
+        
+        ### Long-term Solution
+        1. Code changes required:
+        2. Configuration updates:
+        3. Documentation updates:
+        4. Testing approach:
+        
+        ### Verification Steps
+        1. Security testing:
+        2. Code review:
+        3. Penetration testing:
+        4. Compliance verification:
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: security_checklist
+    attributes:
+      label: Security Implementation Checklist
+      description: Required security measures
+      options:
+        - label: Threat model analysis completed
+        - label: Security design review required
+        - label: Secure coding practices followed
+        - label: Input validation implemented
+        - label: Output encoding implemented
+        - label: Authentication/authorization reviewed
+        - label: Cryptographic requirements assessed
+        - label: Error handling security reviewed
+        - label: Logging and monitoring implemented
+        - label: Security testing plan created
+
+  - type: textarea
+    id: testing_strategy
+    attributes:
+      label: Security Testing Strategy
+      description: How to verify the security fix
+      placeholder: |
+        ### Security Test Cases
+        1. **Positive Testing**:
+           - Valid input scenarios
+           - Normal operation verification
+        
+        2. **Negative Testing**:
+           - Invalid input testing
+           - Boundary condition testing
+           - Malicious input testing
+        
+        3. **Penetration Testing**:
+           - Attack scenario simulation
+           - Vulnerability scanning
+           - Security tool verification
+        
+        ### Automation
+        - [ ] SAST integration
+        - [ ] DAST integration  
+        - [ ] Dependency scanning
+        - [ ] Container scanning
+    validations:
+      required: true
+
+  - type: textarea
+    id: claude_security_context
+    attributes:
+      label: Claude Code Security Context
+      description: Additional context for automated security implementation
+      placeholder: |
+        ### For Claude Code Security Implementation
+        
+        **Security Patterns to Follow:**
+        - Existing security patterns in codebase
+        - Security libraries already in use
+        - Validation patterns to replicate
+        
+        **Security Testing Commands:**
+        ```bash
+        # Security scanning commands
+        make security-check
+        gosec ./...
+        ```
+        
+        **Security Review Points:**
+        - Input validation locations
+        - Authentication mechanisms
+        - Authorization checks
+        - Audit logging requirements
+        
+        **Related Security Issues:**
+        - Previous security fixes: #
+        - Related vulnerabilities: #
+        - Security enhancement requests: #
+        
+        **Compliance Requirements:**
+        - Standards to follow: [OWASP/CIS/etc]
+        - Documentation to update: [SECURITY.md]
+        - Audit trail requirements: [yes/no]
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 🔒 Security Response Process
+        
+        1. **Immediate Assessment**: Security team reviews severity and impact
+        2. **Risk Evaluation**: Determine if immediate action required
+        3. **Communication**: Notify stakeholders if critical
+        4. **Assignment**: Assign to security specialist or Claude Code
+        5. **Implementation**: Develop and test security fix
+        6. **Security Review**: Comprehensive security review of solution
+        7. **Deployment**: Deploy with security validation
+        8. **Post-Deployment**: Monitor and verify fix effectiveness
+        
+        **⚠️ Critical Security Issues**: Follow emergency response procedures for critical vulnerabilities.
+        
+        **Note for Claude Code**: This security task format ensures comprehensive security implementation with proper testing and validation.

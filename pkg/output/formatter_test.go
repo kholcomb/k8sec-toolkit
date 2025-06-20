@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kubesec-io/kubesec/internal/types"
+	"github.com/kholcomb/k8sec-toolkit/internal/types"
 )
 
 func createTestScanResult() *types.ScanResult {
@@ -84,7 +84,7 @@ func TestTableFormatter(t *testing.T) {
 	
 	// Check for expected sections
 	expectedSections := []string{
-		"KubeSec Scan Results",
+		"K8Sec Toolkit Scan Results",
 		"test-context",
 		"test-cluster",
 		"Summary:",
@@ -112,7 +112,7 @@ func TestSummaryFormatter(t *testing.T) {
 	
 	// Check for expected content
 	expectedContent := []string{
-		"KubeSec Security Scan Summary",
+		"K8Sec Toolkit Security Scan Summary",
 		"Context: test-context",
 		"Cluster: test-cluster",
 		"Findings: 1",

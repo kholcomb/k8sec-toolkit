@@ -1,208 +1,307 @@
-# KubeSec - Kubernetes Security Scanner
+# K8Sec Toolkit
 
-A comprehensive CLI tool that orchestrates best-in-class open source security tools to provide unified Kubernetes security assessment.
+[![Security Status](https://img.shields.io/badge/security-hardened-green.svg)](SECURITY.md)
+[![Go Version](https://img.shields.io/badge/go-1.21+-blue.svg)](https://golang.org)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+A comprehensive Kubernetes security scanner that orchestrates best-in-class open source security tools with enterprise-grade security controls.
+
+## 🔒 Security-First Architecture
+
+K8Sec Toolkit implements **defense-in-depth security** with:
+- **Secure Command Execution**: Built-in command validation and allowlisting
+- **Input Validation**: Comprehensive sanitization and allowlisting
+- **Binary Integrity**: Path validation and integrity verification
+- **Audit Logging**: Complete security audit trail
+- **Privilege Minimization**: Least-privilege execution model
+
+See [SECURITY.md](SECURITY.md) for complete security documentation.
+
+## ✨ Features
+
+- **🛡️ Multi-Tool Integration**: Trivy, Kubescape, kube-bench, kubectl-who-can, Polaris
+- **📊 Unified Output**: Consistent JSON/YAML/Table formats across all tools
+- **🔍 CRD Discovery**: Automated Custom Resource Definition security analysis
+- **🎯 Context-Aware**: Scan multiple Kubernetes contexts with intelligent filtering
+- **⚡ Performance**: Parallel tool execution with timeout controls
+- **🏭 Production Ready**: Comprehensive error handling, logging, and monitoring
+- **🔐 Secure by Design**: Enterprise-grade command execution framework
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Go 1.21+
-- Access to a Kubernetes cluster
-- `trivy` and `kubescape` binaries in PATH (for now)
-
-### Build and Run
+### Installation
 
 ```bash
-# Build the binary
+# Build from source
+go build -o k8sec-toolkit cmd/k8sec-toolkit/main.go
+
+# Or use make
 make build
 
-# Run a basic scan
-./build/kubesec scan
+# Install dependencies (macOS with Homebrew)
+brew install trivy kubescape
+```
 
-# Scan with specific output format
-./build/kubesec scan --output json
+### Basic Usage
+
+```bash
+# Scan current context with default tools
+k8sec-toolkit scan
+
+# Scan specific context with selected tools  
+k8sec-toolkit scan --context my-cluster --tools trivy,kubescape
+
+# Output in different formats
+k8sec-toolkit scan --output json
+k8sec-toolkit scan --output yaml  
+k8sec-toolkit scan --output summary
 
 # Scan specific namespaces
-./build/kubesec scan --namespaces kube-system,default
+k8sec-toolkit scan --namespaces kube-system,default
 
-# Get help
-./build/kubesec --help
+# Verbose security audit logging
+k8sec-toolkit scan --verbose
 ```
 
-## 📋 Current Status (MVP)
+### Example Output
 
-### ✅ Implemented
-- CLI framework with full command structure
-- Configuration management system
-- Trivy integration for vulnerability scanning
-- Kubescape integration for configuration security
-- CRD discovery and security analysis
-- Output formatters (JSON, table, YAML, summary)
-- Basic error handling
-
-### ⚠️ Known Limitations (MVP)
-- Requires external `trivy` and `kubescape` binaries
-- No embedded tools yet (planned for v1.0)
-- Limited to Trivy + Kubescape (additional tools coming)
-- Basic error handling only
-
-## 🛠 Commands
-
-### Scan Commands
 ```bash
-# Scan current cluster context
-kubesec scan
+$ k8sec-toolkit scan --output summary
 
-# Scan specific context
-kubesec scan --context production
+K8Sec Toolkit Security Scan Summary
+============================
 
-# Scan with specific tools
-kubesec scan --tools trivy,kubescape
+Context: 
+  Cluster: kubernetes (v1.32.2)
+  Findings: 250 (Critical: 15, High: 78)
+  Risk Score: 85.4
+  Tools: trivy, kubescape
 
-# Scan with timeout
-kubesec scan --timeout 15m
+Critical Issues:
+• CVE-2023-12345: Container image vulnerability in nginx:1.20
+• C-0001: Pod running as root in kube-system namespace
+• C-0013: Network policy missing for high-risk workloads
+
+Recommendations:
+• Update 12 container images to latest versions
+• Implement pod security standards
+• Add network segmentation policies
 ```
 
-### Configuration Commands
-```bash
-# Initialize configuration
-kubesec config init
+## 🔧 Tools Integrated
 
-# View current configuration
-kubesec config list
+All tools are free, open source, and Apache 2.0 licensed:
 
-# Validate configuration
-kubesec config validate
+| Tool | Purpose | Website |
+|------|---------|---------|
+| **[Trivy](https://trivy.dev/)** | Container vulnerability scanning | https://trivy.dev/ |
+| **[Kubescape](https://kubescape.io/)** | Configuration security & compliance | https://kubescape.io/ |
+| **[kube-bench](https://github.com/aquasecurity/kube-bench)** | CIS Kubernetes Benchmark | https://github.com/aquasecurity/kube-bench |
+| **[kubectl-who-can](https://github.com/aquasecurity/kubectl-who-can)** | RBAC analysis | https://github.com/aquasecurity/kubectl-who-can |
+| **[Polaris](https://polaris.docs.fairwinds.com/)** | Workload best practices | https://polaris.docs.fairwinds.com/ |
+
+## 🏗️ Architecture
+
+K8Sec Toolkit follows a **secure tool orchestration** architecture:
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   CLI Interface │───▶│ SecureExecutor   │───▶│ Security Tools  │
+│                 │    │                  │    │                 │
+│ • Input Validation   │ • Command Allow- │    │ • Trivy         │
+│ • Output Formatting  │   listing        │    │ • Kubescape     │
+│ • Error Handling     │ • Arg Validation │    │ • kube-bench    │
+└─────────────────┘    │ • Binary Verif.  │    │ • kubectl-who-can│
+                       │ • Audit Logging  │    │ • Polaris       │
+                       └──────────────────┘    └─────────────────┘
 ```
 
-### Tool Management
+### Key Principles
+
+✅ **Secure by Default**: All commands go through security validation  
+✅ **Defense in Depth**: Multiple security layers prevent attacks  
+✅ **Fail Safe**: Security failures block execution  
+✅ **Audit Everything**: Complete command execution audit trail  
+✅ **Zero Trust**: No user input is trusted without validation  
+
+## 📋 Commands
+
 ```bash
-# List available tools
-kubesec tools list
+# Scan commands
+k8sec-toolkit scan [context...]              # Scan clusters for security issues
+k8sec-toolkit scan --tools trivy             # Use specific tools only
+k8sec-toolkit scan --namespaces ns1,ns2      # Scan specific namespaces
 
-# Check tool status
-kubesec tools status
+# Tool management
+k8sec-toolkit tools status                   # Check tool availability and versions
+k8sec-toolkit tools list                     # List all available tools
+k8sec-toolkit tools update                   # Update tool databases
 
-# Update tool databases
-kubesec tools update
-```
+# Configuration
+k8sec-toolkit config view                    # Show current configuration
+k8sec-toolkit config set <key> <value>       # Set configuration values
 
-## 📊 Output Formats
-
-### Table (Default)
-Human-readable table format with summary and top findings.
-
-### JSON
-Structured output for automation and integration:
-```bash
-kubesec scan --output json
-```
-
-### Summary
-High-level overview perfect for dashboards:
-```bash
-kubesec scan --output summary
+# Utilities
+k8sec-toolkit version                        # Show version information
+k8sec-toolkit completion bash                # Generate shell completion
 ```
 
 ## ⚙️ Configuration
 
-KubeSec uses a YAML configuration file (`~/.kubesec.yaml`):
+### Configuration File
+
+Create `~/.k8sec-toolkit.yaml`:
 
 ```yaml
+# Tool selection
 tools:
   enabled: ["trivy", "kubescape"]
+  
   trivy:
     severity: ["CRITICAL", "HIGH", "MEDIUM"]
     timeout: "5m"
+    
   kubescape:
-    frameworks: ["cis", "nsa"]
+    frameworks: ["NSA", "MITRE"]  
     threshold: 7.0
 
+# Scan settings
 scan:
   timeout: "10m"
   parallel: true
   max_concurrency: 3
 
+# Output settings  
 output:
   format: "table"
+  include_raw_results: false
   redact_sensitive: true
+
+# Security settings
+security:
+  verify_tool_checksums: true
+  cleanup_on_exit: true
 ```
 
-## 🔧 Development
+### Environment Variables
 
-### Build Commands
 ```bash
-# Build for development (with debug symbols)
-make dev
+export K8SEC_TOOLKIT_CONFIG=/path/to/config.yaml
+export K8SEC_TOOLKIT_KUBECONFIG=/path/to/kubeconfig
+export K8SEC_TOOLKIT_CONTEXT=my-cluster
+export K8SEC_TOOLKIT_OUTPUT=json
+```
+
+## 🧪 Development
+
+### Prerequisites
+
+- Go 1.21+
+- kubectl configured with cluster access
+- Security tools installed (trivy, kubescape, etc.)
+
+### Building
+
+```bash
+# Build binary
+make build
 
 # Run tests
 make test
 
-# Validate code
-make validate
+# Run security checks
+make security-check
 
-# Clean build artifacts
-make clean
+# Run linting
+make lint
+
+# Generate code coverage
+make coverage
 ```
 
-### Project Structure
+### Testing
+
+```bash
+# Unit tests
+go test ./...
+
+# Integration tests  
+make test-integration
+
+# Security tests
+make test-security
+
+# End-to-end tests
+make test-e2e
 ```
-kubesec/
-├── cmd/kubesec/          # Main entry point
-├── internal/
-│   ├── cli/              # CLI commands
-│   ├── config/           # Configuration management
-│   ├── scanner/          # Scanner orchestration
-│   ├── tools/            # Tool wrappers
-│   └── types/            # Type definitions
-├── pkg/
-│   └── output/           # Output formatters
-└── Makefile              # Build automation
+
+### GitFlow Workflow
+
+This project uses GitFlow for version control:
+
+```bash
+# Feature development
+git flow feature start new-feature
+git flow feature finish new-feature
+
+# Release preparation
+git flow release start v1.0.0
+git flow release finish v1.0.0
+
+# Hotfix for production
+git flow hotfix start critical-fix
+git flow hotfix finish critical-fix
 ```
 
-## 🎯 MVP Goals
+## 📊 Security Metrics
 
-This MVP demonstrates:
-1. **Working CLI** that scans real Kubernetes clusters
-2. **Tool Integration** with Trivy and Kubescape
-3. **Unified Output** in multiple formats
-4. **CRD Support** for modern Kubernetes environments
-5. **Foundation** for full tool ecosystem
+K8Sec Toolkit provides comprehensive security metrics:
 
-## 🔮 Roadmap
-
-### v1.0 (Next)
-- [ ] Embedded tool binaries (no external dependencies)
-- [ ] kube-bench integration (CIS compliance)
-- [ ] RBAC analysis tools
-- [ ] Polaris integration (best practices)
-- [ ] SARIF output format
-- [ ] Comprehensive test suite
-
-### v1.1
-- [ ] Runtime security (Falco integration)
-- [ ] Policy enforcement analysis (OPA/Gatekeeper)
-- [ ] Advanced CRD security rules
-- [ ] Performance optimizations
-
-### v2.0
-- [ ] MCP server implementation
-- [ ] Web UI for report viewing
-- [ ] Historical trend analysis
-- [ ] Custom rule engine
+- **Vulnerability Count**: Total CVEs discovered
+- **Risk Score**: Weighted security score (0-100)
+- **Compliance Score**: Framework compliance percentage
+- **Coverage Score**: Percentage of resources scanned
+- **Remediation Time**: Estimated fix effort
 
 ## 🤝 Contributing
 
-This is an MVP implementation. Focus areas for contribution:
-1. Testing against diverse cluster environments
-2. Additional tool integrations
-3. Output format improvements
-4. Performance optimizations
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md).
+
+### Security Contributions
+
+For security-related contributions:
+1. Review [SECURITY.md](SECURITY.md) first
+2. All security changes require security review
+3. Security tests must pass
+4. Include security impact assessment
 
 ## 📄 License
 
-Apache 2.0 License - see LICENSE file for details.
+Apache 2.0 - see [LICENSE](LICENSE) for details.
+
+## 🔒 Security
+
+For security vulnerabilities, please see our [Security Policy](SECURITY.md).
+
+**DO NOT** create public issues for security vulnerabilities.
+
+## 📚 Documentation
+
+- [Security Documentation](SECURITY.md)
+- [Architecture Guide](docs/architecture.md)
+- [API Reference](docs/api.md)
+- [Tool Integration Guide](docs/tools.md)
+
+## 🎯 Roadmap
+
+- [ ] Binary signature verification
+- [ ] Container-based tool isolation
+- [ ] Real-time security monitoring
+- [ ] Machine learning anomaly detection
+- [ ] Cloud provider integrations
+- [ ] Policy as Code engine
+- [ ] Continuous compliance monitoring
 
 ---
 
-**Note**: This is a proof-of-concept implementation demonstrating the KubeSec architecture and core functionality. Production use requires additional hardening and testing.
+**Built with ❤️ for Kubernetes Security**

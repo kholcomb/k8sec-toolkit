@@ -1,0 +1,208 @@
+name: 🐛 Bug Report
+description: Report a bug or issue
+title: "[BUG] "
+labels: ["type/bug", "status/todo", "claude-code/ready"]
+projects: ["kubesec-io/1"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug Report Template
+        
+        Use this template to report bugs with sufficient detail for reproduction and resolution.
+
+  - type: input
+    id: bug_summary
+    attributes:
+      label: Bug Summary
+      description: Brief description of the issue
+      placeholder: "Scanner fails when..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: Impact level of the bug
+      options:
+        - severity/critical
+        - severity/high
+        - severity/medium
+        - severity/low
+      default: 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: Current Behavior
+      description: What is currently happening?
+      placeholder: |
+        Describe what you observe when the bug occurs:
+        - What happens
+        - Error messages
+        - Unexpected outputs
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What should happen instead?
+      placeholder: |
+        Describe the correct/expected behavior:
+        - What should happen
+        - Expected outputs
+        - Normal operation
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the issue
+      placeholder: |
+        1. Run command: `kubesec scan...`
+        2. With configuration: `...`
+        3. Observe error: `...`
+        4. Expected result: `...`
+        
+        **Minimal Reproduction Case:**
+        ```bash
+        # Commands to reproduce
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Information
+      description: System and environment details
+      value: |
+        ### System Information
+        - **OS**: [Linux/macOS/Windows + version]
+        - **Architecture**: [amd64/arm64]
+        - **KubeSec Version**: [run `kubesec version`]
+        - **Go Version**: [run `go version`]
+        - **Kubernetes Version**: [run `kubectl version --short`]
+        
+        ### Tool Versions
+        - **Trivy**: [run `trivy version`]
+        - **Kubescape**: [run `kubescape version`]
+        
+        ### Configuration
+        - **Config File**: [path to config file]
+        - **Flags Used**: [command line flags]
+        - **Context**: [Kubernetes context name]
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs_output
+    attributes:
+      label: Logs and Output
+      description: Relevant log output, error messages, or stack traces
+      placeholder: |
+        ```
+        Paste logs, error messages, or stack traces here
+        ```
+        
+        **Security Note**: Please redact any sensitive information like:
+        - Cluster names
+        - Namespace names  
+        - Resource names
+        - Configuration details
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: |
+        - When did this start happening?
+        - Does it happen consistently?
+        - Any recent changes to environment?
+        - Workarounds attempted?
+
+  - type: checkboxes
+    id: impact_assessment
+    attributes:
+      label: Impact Assessment
+      description: How does this bug affect usage?
+      options:
+        - label: Blocks normal operation
+        - label: Causes incorrect security results
+        - label: Performance degradation
+        - label: Usability issue
+        - label: Security concern
+        - label: Documentation issue
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution (Optional)
+      description: If you have ideas for fixing this issue
+      placeholder: |
+        ### Potential Root Cause
+        - 
+        
+        ### Suggested Fix
+        - 
+        
+        ### Files That May Need Changes
+        - 
+        
+        ### Testing Strategy
+        - 
+
+  - type: textarea
+    id: claude_debug_context
+    attributes:
+      label: Claude Code Debug Context
+      description: Additional context for automated debugging
+      placeholder: |
+        ### For Claude Code Investigation
+        
+        **Key Components Involved:**
+        - Scanner: [trivy/kubescape/etc]
+        - Module: [internal/tools/x.go]
+        - Function: [specific function if known]
+        
+        **Error Pattern:**
+        - Error type: [timeout/parsing/validation/etc]
+        - Frequency: [always/sometimes/specific conditions]
+        
+        **Investigation Starting Points:**
+        - Log level to enable: `--verbose`
+        - Files to examine first: 
+        - Related issues: #
+        
+        **Security Considerations:**
+        - Does this affect security scanning accuracy?
+        - Could this be exploited?
+        - Are credentials involved?
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 🔍 Bug Triage Process
+        
+        1. **Initial Review**: Team will assess severity and impact
+        2. **Reproduction**: Attempt to reproduce using provided steps
+        3. **Root Cause Analysis**: Investigate underlying cause
+        4. **Priority Assignment**: Based on severity and impact
+        5. **Assignment**: Assign to developer or Claude Code for resolution
+        6. **Fix Development**: Implement solution with tests
+        7. **Verification**: Confirm fix resolves the issue
+        
+        **Note for Claude Code**: This bug report format provides structured information for systematic debugging and resolution.

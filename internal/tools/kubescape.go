@@ -11,9 +11,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubesec-io/kubesec/internal/config"
-	"github.com/kubesec-io/kubesec/internal/security"
-	"github.com/kubesec-io/kubesec/internal/types"
+	"github.com/kholcomb/k8sec-toolkit/internal/config"
+	"github.com/kholcomb/k8sec-toolkit/internal/security"
+	"github.com/kholcomb/k8sec-toolkit/internal/types"
 )
 
 // KubescapeWrapper wraps the Kubescape security scanner

@@ -10,7 +10,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"gopkg.in/yaml.v3"
 
-	"github.com/kubesec-io/kubesec/internal/types"
+	"github.com/kholcomb/k8sec-toolkit/internal/types"
 )
 
 // Formatter handles different output formats
@@ -70,7 +70,7 @@ func (f *TableFormatter) formatScanResult(result *types.ScanResult) string {
 	var output strings.Builder
 
 	// Header
-	output.WriteString(fmt.Sprintf("=== KubeSec Scan Results: %s ===\n", result.Context))
+	output.WriteString(fmt.Sprintf("=== K8Sec Toolkit Scan Results: %s ===\n", result.Context))
 	
 	// Cluster info
 	if result.ClusterInfo != nil {
@@ -184,7 +184,7 @@ func (f *SummaryFormatter) Format(results []*types.ScanResult) ([]byte, error) {
 	totalLow := 0
 	avgRiskScore := 0.0
 
-	output.WriteString("KubeSec Security Scan Summary\n")
+	output.WriteString("K8Sec Toolkit Security Scan Summary\n")
 	output.WriteString("============================\n\n")
 
 	for _, result := range results {

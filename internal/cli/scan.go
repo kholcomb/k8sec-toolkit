@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/sirupsen/logrus"
 
-	"github.com/kubesec-io/kubesec/internal/scanner"
-	"github.com/kubesec-io/kubesec/internal/config"
-	"github.com/kubesec-io/kubesec/pkg/output"
+	"github.com/kholcomb/k8sec-toolkit/internal/scanner"
+	"github.com/kholcomb/k8sec-toolkit/internal/config"
+	"github.com/kholcomb/k8sec-toolkit/pkg/output"
 )
 
 var (
@@ -31,19 +31,19 @@ misconfigurations, and compliance issues using integrated security tools.
 
 Examples:
   # Scan current cluster with all tools
-  kubesec scan
+  k8sec-toolkit scan
 
   # Scan specific context with selected tools
-  kubesec scan --context prod --tools trivy,kubescape
+  k8sec-toolkit scan --context prod --tools trivy,kubescape
 
   # Scan multiple namespaces
-  kubesec scan --namespaces kube-system,default,app-prod
+  k8sec-toolkit scan --namespaces kube-system,default,app-prod
 
   # Output results in JSON format
-  kubesec scan --output json
+  k8sec-toolkit scan --output json
 
   # Scan with extended timeout
-  kubesec scan --timeout 15m`,
+  k8sec-toolkit scan --timeout 15m`,
 		RunE: runScan,
 	}
 
@@ -59,7 +59,7 @@ Examples:
 func runScan(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
 	
-	logrus.Info("Starting KubeSec security scan...")
+	logrus.Info("Starting K8Sec Toolkit security scan...")
 
 	// Load configuration
 	cfg, err := config.Load()
