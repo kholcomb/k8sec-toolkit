@@ -115,17 +115,12 @@ func (f *TableFormatter) formatFindingsTable(findings []types.SecurityFinding) s
 	
 	output.WriteString("\nFindings:\n")
 	
-	// Create table
+	// Create table using new API
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
-	table.SetHeader([]string{"Severity", "Type", "Resource", "Title", "Source"})
-	table.SetBorder(false)
-	table.SetCenterSeparator("")
-	table.SetColumnSeparator("")
-	table.SetRowSeparator("")
-	table.SetHeaderLine(false)
-	table.SetTablePadding("  ")
-	table.SetNoWhiteSpace(true)
+	
+	// Set headers using new API
+	table.Header("Severity", "Type", "Resource", "Title", "Source")
 
 	// Add findings (limit to first 20 for readability)
 	count := len(findings)
@@ -146,13 +141,13 @@ func (f *TableFormatter) formatFindingsTable(findings []types.SecurityFinding) s
 			title = title[:47] + "..."
 		}
 
-		table.Append([]string{
+		table.Append(
 			finding.Severity,
 			finding.Type,
 			resourceName,
 			title,
 			finding.Source,
-		})
+		)
 	}
 
 	table.Render()
