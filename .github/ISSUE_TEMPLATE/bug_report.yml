@@ -67,7 +67,7 @@ body:
       label: Steps to Reproduce
       description: Detailed steps to reproduce the issue
       placeholder: |
-        1. Run command: `kubesec scan...`
+        1. Run command: `k8sec-toolkit scan...`
         2. With configuration: `...`
         3. Observe error: `...`
         4. Expected result: `...`
@@ -88,7 +88,7 @@ body:
         ### System Information
         - **OS**: [Linux/macOS/Windows + version]
         - **Architecture**: [amd64/arm64]
-        - **KubeSec Version**: [run `kubesec version`]
+        - **KubeSec Version**: [run `k8sec-toolkit version`]
         - **Go Version**: [run `go version`]
         - **Kubernetes Version**: [run `kubectl version --short`]
 

@@ -139,7 +139,7 @@ body:
         ### Code Components
         - Files: `internal/tools/trivy.go`
         - Functions: `Execute()`, `Validate()`
-        - CLI commands: `kubesec scan`
+        - CLI commands: `k8sec-toolkit scan`
 
         ### Features
         - Security scanning workflow
@@ -177,13 +177,13 @@ body:
         ### Basic Examples
         ```bash
         # Example 1: Basic usage
-        kubesec scan --context production
+        k8sec-toolkit scan --context production
         ```
 
         ### Advanced Examples
         ```bash
         # Example 2: Advanced configuration
-        kubesec scan --tools trivy,kubescape --output json
+        k8sec-toolkit scan --tools trivy,kubescape --output json
         ```
 
         ### Use Case Scenarios
