@@ -79,3 +79,4 @@ pids/
 *.pid
 *.seed
 *.pid.lock
+build/
