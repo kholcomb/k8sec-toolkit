@@ -12,7 +12,7 @@ func newVersionCommand(version, gitCommit, buildTime string) *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Show version information",
-		Long:  "Display detailed version information for KubeSec and its components",
+		Long:  "Display detailed version information for K8Sec Toolkit and its components",
 		Run: func(cmd *cobra.Command, args []string) {
 			showVersion(version, gitCommit, buildTime)
 		},
@@ -21,7 +21,7 @@ func newVersionCommand(version, gitCommit, buildTime string) *cobra.Command {
 
 // showVersion displays version information
 func showVersion(version, gitCommit, buildTime string) {
-	fmt.Printf("KubeSec version %s\n", version)
+	fmt.Printf("K8Sec Toolkit version %s\n", version)
 	fmt.Printf("Git commit: %s\n", gitCommit)
 	fmt.Printf("Built: %s\n", buildTime)
 	fmt.Printf("Go version: %s\n", runtime.Version())

@@ -20,12 +20,12 @@ var (
 // NewRootCommand creates the root cobra command
 func NewRootCommand(version, gitCommit, buildTime string) *cobra.Command {
 	rootCmd := &cobra.Command{
-		Use:   "kubesec",
-		Short: "KubeSec - Kubernetes Security Scanner",
-		Long: `KubeSec is a comprehensive Kubernetes security scanner that orchestrates
+		Use:   "k8sec-toolkit",
+		Short: "K8Sec Toolkit - Kubernetes Security Scanner",
+		Long: `K8Sec Toolkit is a comprehensive Kubernetes security scanner that orchestrates
 best-in-class open source security tools to provide unified security assessment.
 
-KubeSec integrates:
+K8Sec Toolkit integrates:
 - Trivy: Container vulnerability scanning
 - Kubescape: Configuration security and compliance
 - kube-bench: CIS Kubernetes Benchmark
@@ -41,7 +41,7 @@ All tools are free, open source, and Apache 2.0 licensed.`,
 	}
 
 	// Global flags
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kubesec.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.k8sec-toolkit.yaml)")
 	rootCmd.PersistentFlags().StringVar(&kubeconfig, "kubeconfig", "", "path to the kubeconfig file (default is ~/.kube/config)")
 	rootCmd.PersistentFlags().StringVar(&kubeContext, "context", "", "kubernetes context to use")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
@@ -89,10 +89,10 @@ func initConfig() {
 		viper.AddConfigPath(home)
 		viper.AddConfigPath(".")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".kubesec")
+		viper.SetConfigName(".k8sec-toolkit")
 	}
 
-	viper.SetEnvPrefix("KUBESEC")
+	viper.SetEnvPrefix("K8SEC_TOOLKIT")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {

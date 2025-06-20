@@ -1,7 +1,7 @@
-# KubeSec Makefile
+# K8Sec Toolkit Makefile
 
 # Build variables
-BINARY_NAME=kubesec
+BINARY_NAME=k8sec-toolkit
 VERSION?=dev
 GITCOMMIT?=$(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 BUILDTIME?=$(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
@@ -26,7 +26,7 @@ all: clean deps build
 build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
-	$(GOBUILD) -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/kubesec
+	$(GOBUILD) -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/k8sec-toolkit
 	@echo "Binary built: $(BUILD_DIR)/$(BINARY_NAME)"
 
 ## clean: Clean build artifacts
@@ -60,7 +60,7 @@ install: build
 dev:
 	@echo "Building $(BINARY_NAME) for development..."
 	@mkdir -p $(BUILD_DIR)
-	$(GOBUILD) -gcflags="all=-N -l" -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/kubesec
+	$(GOBUILD) -gcflags="all=-N -l" -ldflags "$(LDFLAGS)" -o $(BUILD_DIR)/$(BINARY_NAME) ./cmd/k8sec-toolkit
 
 ## validate: Run validation checks
 validate: deps

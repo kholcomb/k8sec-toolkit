@@ -12,9 +12,9 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/kubesec-io/kubesec/internal/config"
-	"github.com/kubesec-io/kubesec/internal/types"
-	"github.com/kubesec-io/kubesec/internal/tools"
+	"github.com/kholcomb/k8sec-toolkit/internal/config"
+	"github.com/kholcomb/k8sec-toolkit/internal/types"
+	"github.com/kholcomb/k8sec-toolkit/internal/tools"
 	apiextensionsclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 )
 

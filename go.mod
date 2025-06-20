@@ -1,4 +1,4 @@
-module github.com/kubesec-io/kubesec
+module github.com/kholcomb/k8sec-toolkit
 
 go 1.21
 

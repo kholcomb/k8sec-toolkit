@@ -1,0 +1,275 @@
+name: 📚 Documentation Task
+description: Documentation improvement or creation
+title: "[DOCS] "
+labels: ["type/documentation", "status/todo", "claude-code/ready"]
+projects: ["kubesec-io/1"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📚 Documentation Task Template
+        
+        Use this template for documentation improvements, new documentation, or content updates.
+
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Documentation Type
+      description: Type of documentation work
+      options:
+        - docs/user-guide
+        - docs/api-reference
+        - docs/developer-guide
+        - docs/security
+        - docs/architecture
+        - docs/troubleshooting
+        - docs/installation
+        - docs/configuration
+        - docs/changelog
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: Documentation priority level
+      options:
+        - priority/low
+        - priority/medium
+        - priority/high
+        - priority/critical
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: documentation_request
+    attributes:
+      label: Documentation Request
+      description: What documentation needs to be created or improved?
+      placeholder: |
+        ### Current State
+        - What documentation exists currently?
+        - What is missing or incomplete?
+        - What needs improvement?
+        
+        ### Requested Changes
+        - New content needed:
+        - Content to update:
+        - Content to reorganize:
+        
+        ### Target Audience
+        - End users
+        - Developers
+        - System administrators
+        - Security professionals
+    validations:
+      required: true
+
+  - type: textarea
+    id: content_outline
+    attributes:
+      label: Content Outline
+      description: Proposed structure and content outline
+      placeholder: |
+        ### Documentation Structure
+        1. **Introduction**
+           - Overview
+           - Prerequisites
+           
+        2. **Main Content**
+           - Section 1: 
+           - Section 2:
+           - Section 3:
+           
+        3. **Examples**
+           - Basic usage example
+           - Advanced usage example
+           - Troubleshooting example
+           
+        4. **Reference**
+           - API reference
+           - Configuration reference
+           - Command reference
+           
+        ### Key Topics to Cover
+        - 
+        - 
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How to know when this documentation task is complete
+      value: |
+        ### Documentation Completeness
+        - [ ] All requested sections written
+        - [ ] Examples provided and tested
+        - [ ] Screenshots/diagrams included (if applicable)
+        - [ ] Cross-references and links updated
+        - [ ] Table of contents updated
+        
+        ### Quality Standards
+        - [ ] Grammar and spelling checked
+        - [ ] Technical accuracy verified
+        - [ ] Code examples tested
+        - [ ] Consistent formatting applied
+        - [ ] Accessibility guidelines followed
+        
+        ### Review Process
+        - [ ] Technical review completed
+        - [ ] Editorial review completed
+        - [ ] User feedback incorporated
+        - [ ] Final approval received
+    validations:
+      required: true
+
+  - type: textarea
+    id: related_features
+    attributes:
+      label: Related Features/Code
+      description: Which features or code sections does this documentation cover?
+      placeholder: |
+        ### Code Components
+        - Files: `internal/tools/trivy.go`
+        - Functions: `Execute()`, `Validate()`
+        - CLI commands: `kubesec scan`
+        
+        ### Features
+        - Security scanning workflow
+        - Configuration management
+        - Output formatting
+        
+        ### Related Documentation
+        - Existing docs to update: `README.md`
+        - Related sections: Security documentation
+        - Dependencies: API documentation
+
+  - type: checkboxes
+    id: documentation_requirements
+    attributes:
+      label: Documentation Requirements
+      description: Required elements for this documentation
+      options:
+        - label: Installation instructions
+        - label: Configuration examples
+        - label: Usage examples
+        - label: API reference
+        - label: Troubleshooting guide
+        - label: Security considerations
+        - label: Performance considerations
+        - label: Integration examples
+        - label: Screenshots/diagrams
+        - label: Video tutorials (if applicable)
+
+  - type: textarea
+    id: examples_needed
+    attributes:
+      label: Examples and Use Cases
+      description: Specific examples that should be included
+      placeholder: |
+        ### Basic Examples
+        ```bash
+        # Example 1: Basic usage
+        kubesec scan --context production
+        ```
+        
+        ### Advanced Examples
+        ```bash
+        # Example 2: Advanced configuration
+        kubesec scan --tools trivy,kubescape --output json
+        ```
+        
+        ### Use Case Scenarios
+        1. **Development Environment**:
+           - Local testing
+           - CI/CD integration
+           
+        2. **Production Environment**:
+           - Security monitoring
+           - Compliance reporting
+           
+        3. **Troubleshooting**:
+           - Common error scenarios
+           - Debug procedures
+
+  - type: textarea
+    id: style_guidelines
+    attributes:
+      label: Style and Format Guidelines
+      description: Documentation style and formatting requirements
+      value: |
+        ### Writing Style
+        - [ ] Clear and concise language
+        - [ ] Active voice preferred
+        - [ ] Technical but accessible
+        - [ ] Consistent terminology
+        
+        ### Formatting
+        - [ ] Markdown format
+        - [ ] Consistent heading structure
+        - [ ] Code blocks with syntax highlighting
+        - [ ] Proper linking and cross-references
+        
+        ### Standards
+        - [ ] Follow project documentation style guide
+        - [ ] Use established templates
+        - [ ] Include security warnings where appropriate
+        - [ ] Add accessibility considerations
+
+  - type: textarea
+    id: claude_doc_context
+    attributes:
+      label: Claude Code Documentation Context
+      description: Additional context for automated documentation generation
+      placeholder: |
+        ### For Claude Code Documentation
+        
+        **Source Material:**
+        - Code files to document: 
+        - Existing documentation to reference:
+        - Configuration files to explain:
+        
+        **Documentation Patterns:**
+        - Follow existing style in: `README.md`
+        - Use templates from: `.github/`
+        - Reference format: `SECURITY.md`
+        
+        **Technical Accuracy:**
+        - Test all code examples
+        - Verify command outputs
+        - Check configuration syntax
+        - Validate API references
+        
+        **Integration Points:**
+        - Update table of contents in: `README.md`
+        - Add cross-references to: related docs
+        - Link from: navigation/index pages
+        
+        **Maintenance Notes:**
+        - Update when code changes: [specific triggers]
+        - Review schedule: [quarterly/release-based]
+        - Owner for updates: [team/role]
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 📝 Documentation Process
+        
+        1. **Research**: Gather information from code, existing docs, and stakeholders
+        2. **Outline**: Create detailed content outline and structure
+        3. **Draft**: Write initial content with examples and code snippets
+        4. **Review**: Technical and editorial review of content
+        5. **Test**: Verify all examples and procedures work correctly
+        6. **Integrate**: Add to documentation site and update navigation
+        7. **Publish**: Make available and announce to users
+        
+        **Note for Claude Code**: This documentation format ensures comprehensive, accurate, and maintainable documentation that integrates well with the existing documentation ecosystem.
