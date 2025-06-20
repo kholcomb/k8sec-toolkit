@@ -55,8 +55,8 @@ type KubescapeConfig struct {
 
 // KubeBenchConfig contains kube-bench specific configuration
 type KubeBenchConfig struct {
-	Version   string `mapstructure:"version"`
-	ConfigDir string `mapstructure:"config_dir"`
+	Version   string   `mapstructure:"version"`
+	ConfigDir string   `mapstructure:"config_dir"`
 	Targets   []string `mapstructure:"targets"`
 }
 
@@ -69,19 +69,19 @@ type RBACConfig struct {
 
 // PolarisConfig contains Polaris-specific configuration
 type PolarisConfig struct {
-	ConfigFile        string `mapstructure:"config_file"`
-	OnlyShowFailures  bool   `mapstructure:"only_show_failures"`
+	ConfigFile       string `mapstructure:"config_file"`
+	OnlyShowFailures bool   `mapstructure:"only_show_failures"`
 }
 
 // ScanConfig contains scan execution configuration
 type ScanConfig struct {
-	Namespaces      []string      `mapstructure:"namespaces"`
-	Tools           []string      `mapstructure:"tools"`
-	Timeout         time.Duration `mapstructure:"timeout"`
-	Parallel        bool          `mapstructure:"parallel"`
-	MaxConcurrency  int           `mapstructure:"max_concurrency"`
-	RetryAttempts   int           `mapstructure:"retry_attempts"`
-	FailureThreshold float64      `mapstructure:"failure_threshold"`
+	Namespaces       []string      `mapstructure:"namespaces"`
+	Tools            []string      `mapstructure:"tools"`
+	Timeout          time.Duration `mapstructure:"timeout"`
+	Parallel         bool          `mapstructure:"parallel"`
+	MaxConcurrency   int           `mapstructure:"max_concurrency"`
+	RetryAttempts    int           `mapstructure:"retry_attempts"`
+	FailureThreshold float64       `mapstructure:"failure_threshold"`
 }
 
 // OutputConfig contains output formatting configuration
@@ -124,7 +124,7 @@ func Load() (*Config, error) {
 func setDefaults() {
 	// Tool defaults
 	viper.SetDefault("tools.enabled", []string{"trivy", "kubescape"})
-	
+
 	// Trivy defaults
 	viper.SetDefault("tools.trivy.severity", []string{"CRITICAL", "HIGH", "MEDIUM"})
 	viper.SetDefault("tools.trivy.timeout", "5m")
@@ -159,7 +159,7 @@ func setDefaults() {
 	viper.SetDefault("output.redact_sensitive", true)
 
 	// Security defaults
-	viper.SetDefault("security.temp_dir", "/tmp/kubesec")
+	viper.SetDefault("security.temp_dir", "/tmp/k8sec-toolkit")
 	viper.SetDefault("security.cleanup_on_exit", true)
 	viper.SetDefault("security.verify_tool_checksums", true)
 }

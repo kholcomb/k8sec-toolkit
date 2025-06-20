@@ -33,7 +33,7 @@ rules:
     max-spaces-inside: 1
     max-spaces-inside-empty: 0
 
-  # Braces rules  
+  # Braces rules
   braces:
     max-spaces-inside: 1
     max-spaces-inside-empty: 0

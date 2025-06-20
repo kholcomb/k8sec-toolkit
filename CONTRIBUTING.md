@@ -23,30 +23,34 @@ Thank you for your interest in contributing to K8Sec Toolkit! This document prov
 ### Initial Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/kholcomb/k8sec-toolkit.git
    cd k8sec-toolkit
    ```
 
 2. **Install dependencies:**
+
    ```bash
    make deps
    ```
 
 3. **Install pre-commit hooks:**
+
    ```bash
    # Install pre-commit if not already installed
    pip install pre-commit
-   
+
    # Install the hooks
    make pre-commit-install
    ```
 
 4. **Install additional tools:**
+
    ```bash
    # Install golangci-lint for comprehensive linting
    go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-   
+
    # Install gosec for security scanning
    go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
    ```
@@ -58,6 +62,7 @@ We use pre-commit hooks to ensure code quality and consistency. These hooks run 
 ### Installed Hooks
 
 #### Go Language Hooks
+
 - **go-fmt**: Automatically formats Go code
 - **go-imports**: Organizes imports and formats code
 - **go-mod-tidy**: Cleans up go.mod and go.sum files
@@ -66,12 +71,14 @@ We use pre-commit hooks to ensure code quality and consistency. These hooks run 
 - **golangci-lint**: Comprehensive Go linting
 
 #### Security Hooks
+
 - **detect-secrets**: Prevents committing secrets and credentials
 - **gitleaks**: Additional secret detection
 - **check-yaml**: Validates YAML syntax
 - **check-json**: Validates JSON files
 
 #### Quality Hooks
+
 - **trailing-whitespace**: Removes trailing whitespace
 - **end-of-file-fixer**: Ensures files end with newline
 - **check-merge-conflict**: Detects merge conflict markers
@@ -79,12 +86,15 @@ We use pre-commit hooks to ensure code quality and consistency. These hooks run 
 - **mixed-line-ending**: Normalizes line endings
 
 #### Docker & Infrastructure
+
 - **hadolint**: Dockerfile linting for best practices
 
 #### Documentation
+
 - **markdownlint**: Markdown formatting and consistency
 
 #### Custom Project Hooks
+
 - **check-k8sec-toolkit-references**: Ensures no old "kubesec" references
 - **check-go-module-path**: Validates correct Go module path
 - **check-binary-name-consistency**: Ensures consistent binary naming
@@ -209,6 +219,7 @@ We follow the GitFlow branching model:
 ### Contributing Process
 
 1. **Create Feature Branch:**
+
    ```bash
    git checkout develop
    git pull origin develop
@@ -222,17 +233,20 @@ We follow the GitFlow branching model:
    - Ensure all pre-commit hooks pass
 
 3. **Test Locally:**
+
    ```bash
    make ci-check  # Runs all CI checks locally
    ```
 
 4. **Commit Changes:**
+
    ```bash
    git add .
    git commit -m "feat: add new security scanner integration"
    ```
 
 5. **Push and Create PR:**
+
    ```bash
    git push origin feature/your-feature-name
    # Create pull request through GitHub
@@ -251,6 +265,7 @@ We follow conventional commits:
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes

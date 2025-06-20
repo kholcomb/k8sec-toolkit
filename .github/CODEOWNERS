@@ -1,8 +1,8 @@
 # CODEOWNERS for k8sec-toolkit
-# 
+#
 # This file defines who owns and reviews different parts of the codebase.
 # Each line is a file pattern followed by one or more owners.
-# 
+#
 # Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # =============================================================================

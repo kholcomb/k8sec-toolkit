@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/sirupsen/logrus"
 )
 
 var (
-	cfgFile     string
-	kubeconfig  string
-	kubeContext string
-	verbose     bool
+	cfgFile      string
+	kubeconfig   string
+	kubeContext  string
+	verbose      bool
 	outputFormat string
 )
 

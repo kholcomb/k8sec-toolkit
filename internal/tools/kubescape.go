@@ -27,7 +27,7 @@ type KubescapeWrapper struct {
 var (
 	// Valid namespace name pattern (RFC 1123 DNS label)
 	validNamespacePattern = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
-	// Valid Kubernetes context pattern  
+	// Valid Kubernetes context pattern
 	validContextPattern = regexp.MustCompile(`^[a-zA-Z0-9._-]+$`)
 	// Valid framework names (allowlist)
 	validFrameworks = map[string]bool{
@@ -39,19 +39,19 @@ var (
 
 // KubescapeReport represents Kubescape's scan output
 type KubescapeReport struct {
-	CustomerGUID     string                    `json:"customerGUID"`
-	ClusterName      string                    `json:"clusterName"`
-	ReportGeneratedTime string                 `json:"reportGeneratedTime"`
-	Results          []KubescapeFrameworkResult `json:"results"`
-	ClusterAPIServerInfo KubescapeClusterInfo  `json:"clusterAPIServerInfo"`
-	SummaryDetails   KubescapeSummary          `json:"summaryDetails"`
+	CustomerGUID         string                     `json:"customerGUID"`
+	ClusterName          string                     `json:"clusterName"`
+	ReportGeneratedTime  string                     `json:"reportGeneratedTime"`
+	Results              []KubescapeFrameworkResult `json:"results"`
+	ClusterAPIServerInfo KubescapeClusterInfo       `json:"clusterAPIServerInfo"`
+	SummaryDetails       KubescapeSummary           `json:"summaryDetails"`
 }
 
 // KubescapeFrameworkResult represents results for a specific framework
 type KubescapeFrameworkResult struct {
-	Framework    KubescapeFramework        `json:"framework"`
-	Score        float64                   `json:"score"`
-	Controls     []KubescapeControlResult  `json:"controls"`
+	Framework KubescapeFramework       `json:"framework"`
+	Score     float64                  `json:"score"`
+	Controls  []KubescapeControlResult `json:"controls"`
 }
 
 // KubescapeFramework represents a compliance framework
@@ -63,46 +63,46 @@ type KubescapeFramework struct {
 
 // KubescapeControlResult represents a single control result
 type KubescapeControlResult struct {
-	ControlID     string                     `json:"controlID"`
-	Name          string                     `json:"name"`
-	Description   string                     `json:"description"`
-	Remediation   string                     `json:"remediation"`
-	BaseScore     float64                    `json:"baseScore"`
-	Score         float64                    `json:"score"`
-	Status        KubescapeControlStatus     `json:"status"`
+	ControlID       string                    `json:"controlID"`
+	Name            string                    `json:"name"`
+	Description     string                    `json:"description"`
+	Remediation     string                    `json:"remediation"`
+	BaseScore       float64                   `json:"baseScore"`
+	Score           float64                   `json:"score"`
+	Status          KubescapeControlStatus    `json:"status"`
 	ResourcesResult []KubescapeResourceResult `json:"resourcesResult"`
-	Rules         []KubescapeRule            `json:"rules"`
+	Rules           []KubescapeRule           `json:"rules"`
 }
 
 // KubescapeControlStatus represents control status
 type KubescapeControlStatus struct {
-	Status      string `json:"status"`
-	SubStatus   string `json:"subStatus"`
-	Info        string `json:"info"`
+	Status    string `json:"status"`
+	SubStatus string `json:"subStatus"`
+	Info      string `json:"info"`
 }
 
 // KubescapeResourceResult represents a resource that was evaluated
 type KubescapeResourceResult struct {
-	ResourceID   string                    `json:"resourceID"`
-	Object       map[string]interface{}    `json:"object"`
+	ResourceID     string                   `json:"resourceID"`
+	Object         map[string]interface{}   `json:"object"`
 	Configurations []KubescapeConfiguration `json:"configurations"`
 }
 
 // KubescapeConfiguration represents a configuration issue
 type KubescapeConfiguration struct {
-	Type        string                 `json:"type"`
-	Path        string                 `json:"path"`
-	Value       interface{}            `json:"value"`
-	Expected    interface{}            `json:"expected"`
-	Description string                 `json:"description"`
+	Type        string      `json:"type"`
+	Path        string      `json:"path"`
+	Value       interface{} `json:"value"`
+	Expected    interface{} `json:"expected"`
+	Description string      `json:"description"`
 }
 
 // KubescapeRule represents a compliance rule
 type KubescapeRule struct {
-	Name        string `json:"name"`
-	RuleLanguage string `json:"ruleLanguage"`
-	Match       []map[string]interface{} `json:"match"`
-	Rule        string `json:"rule"`
+	Name         string                   `json:"name"`
+	RuleLanguage string                   `json:"ruleLanguage"`
+	Match        []map[string]interface{} `json:"match"`
+	Rule         string                   `json:"rule"`
 }
 
 // KubescapeClusterInfo represents cluster information
@@ -113,12 +113,12 @@ type KubescapeClusterInfo struct {
 
 // KubescapeSummary represents scan summary
 type KubescapeSummary struct {
-	Score              float64            `json:"score"`
-	TotalResources     int                `json:"totalResources"`
-	TotalFailed        int                `json:"totalFailed"`
-	ControlsSummary    map[string]int     `json:"controlsSummary"`
-	ComplianceScore    float64            `json:"complianceScore"`
-	FrameworksScores   map[string]float64 `json:"frameworksScores"`
+	Score            float64            `json:"score"`
+	TotalResources   int                `json:"totalResources"`
+	TotalFailed      int                `json:"totalFailed"`
+	ControlsSummary  map[string]int     `json:"controlsSummary"`
+	ComplianceScore  float64            `json:"complianceScore"`
+	FrameworksScores map[string]float64 `json:"frameworksScores"`
 }
 
 // NewKubescapeWrapper creates a new Kubescape wrapper
@@ -129,7 +129,6 @@ func NewKubescapeWrapper(config config.KubescapeConfig) *KubescapeWrapper {
 		logger:   logrus.New(),
 	}
 }
-
 
 // validateNamespace validates namespace names for security (used by buildScanArgs)
 func validateNamespace(ns string) error {
@@ -202,11 +201,11 @@ func (k *KubescapeWrapper) Validate() error {
 	if err != nil {
 		return fmt.Errorf("kubescape validation failed: %w", err)
 	}
-	
+
 	if result.ExitCode != 0 {
 		return fmt.Errorf("kubescape version check failed with exit code %d", result.ExitCode)
 	}
-	
+
 	k.logger.Info("Kubescape validation successful")
 	return nil
 }
@@ -214,7 +213,7 @@ func (k *KubescapeWrapper) Validate() error {
 // Execute runs Kubescape with the given configuration
 func (k *KubescapeWrapper) Execute(ctx context.Context, config types.ToolConfig) (*types.ToolResult, error) {
 	startTime := time.Now()
-	
+
 	k.logger.Info("Starting Kubescape configuration scan")
 
 	// Build command arguments with security validation
@@ -228,13 +227,13 @@ func (k *KubescapeWrapper) Execute(ctx context.Context, config types.ToolConfig)
 	duration := time.Since(startTime)
 
 	result := &types.ToolResult{
-		ToolName:   "kubescape",
-		ExecutedAt: startTime,
-		Duration:   duration,
-		ExitCode:   execResult.ExitCode,
-		RawOutput:  execResult.Stdout,
+		ToolName:    "kubescape",
+		ExecutedAt:  startTime,
+		Duration:    duration,
+		ExitCode:    execResult.ExitCode,
+		RawOutput:   execResult.Stdout,
 		ErrorOutput: execResult.Stderr,
-		Metadata:   map[string]interface{}{
+		Metadata: map[string]interface{}{
 			"audit_trail": execResult.AuditTrail,
 		},
 	}
@@ -257,7 +256,7 @@ func (k *KubescapeWrapper) Execute(ctx context.Context, config types.ToolConfig)
 	}
 
 	result.Findings = findings
-	k.logger.Infof("Kubescape scan completed with %d findings in %v", 
+	k.logger.Infof("Kubescape scan completed with %d findings in %v",
 		len(findings), duration)
 
 	return result, nil
@@ -270,12 +269,12 @@ func (k *KubescapeWrapper) buildScanArgs(config types.ToolConfig) ([]string, err
 	if len(k.config.Frameworks) > 0 {
 		framework = k.config.Frameworks[0] // Use first framework
 	}
-	
+
 	// Validate framework name for security
 	if err := validateFramework(framework); err != nil {
 		return nil, err
 	}
-	
+
 	args := []string{
 		"scan", "framework", framework,
 		"--format", "json",
@@ -353,7 +352,7 @@ func (k *KubescapeWrapper) parseResults(output []byte) ([]types.SecurityFinding,
 func (k *KubescapeWrapper) controlToFinding(control KubescapeControlResult, resource KubescapeResourceResult, framework KubescapeFramework) types.SecurityFinding {
 	// Extract resource information
 	resourceRef := k.extractResourceReference(resource.Object)
-	
+
 	// Determine finding type based on framework
 	findingType := string(types.FindingTypeMisconfiguration)
 	if strings.Contains(strings.ToLower(framework.Name), "compliance") {
@@ -368,7 +367,7 @@ func (k *KubescapeWrapper) controlToFinding(control KubescapeControlResult, reso
 	evidence["control_score"] = control.Score
 	evidence["base_score"] = control.BaseScore
 	evidence["status"] = control.Status
-	
+
 	if len(resource.Configurations) > 0 {
 		evidence["configurations"] = resource.Configurations
 	}
@@ -398,7 +397,7 @@ func (k *KubescapeWrapper) extractResourceReference(obj map[string]interface{}) 
 	if kind, ok := obj["kind"].(string); ok {
 		resourceRef.Kind = kind
 	}
-	
+
 	if apiVersion, ok := obj["apiVersion"].(string); ok {
 		resourceRef.APIVersion = apiVersion
 	}
@@ -439,13 +438,13 @@ func (k *KubescapeWrapper) mapScoreToSeverity(score float64) string {
 // UpdateDatabase updates Kubescape's rule database
 func (k *KubescapeWrapper) UpdateDatabase() error {
 	k.logger.Info("Updating Kubescape database")
-	
+
 	// Execute update using secure executor
 	result, err := k.executor.Execute(context.Background(), "kubescape-update", []string{"download", "artifacts"})
 	if err != nil {
 		return fmt.Errorf("failed to update kubescape database: %w", err)
 	}
-	
+
 	if result.ExitCode != 0 {
 		return fmt.Errorf("kubescape database update failed with exit code %d", result.ExitCode)
 	}
@@ -462,7 +461,7 @@ func (k *KubescapeWrapper) GetVersion() string {
 		k.logger.Warnf("Version check failed: %v", err)
 		return "unknown"
 	}
-	
+
 	if result.ExitCode != 0 {
 		return "unknown"
 	}

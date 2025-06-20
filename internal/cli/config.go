@@ -62,8 +62,8 @@ func runConfigInit(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get home directory: %w", err)
 	}
 
-	configPath := filepath.Join(homeDir, ".kubesec.yaml")
-	
+	configPath := filepath.Join(homeDir, ".k8sec-toolkit.yaml")
+
 	// Check if config already exists
 	if _, err := os.Stat(configPath); err == nil {
 		return fmt.Errorf("configuration file already exists at %s", configPath)
@@ -112,7 +112,7 @@ func runConfigInit(cmd *cobra.Command, args []string) error {
 func runConfigList(cmd *cobra.Command, args []string) error {
 	fmt.Printf("Configuration file: %s\n", viper.ConfigFileUsed())
 	fmt.Printf("\nCurrent settings:\n")
-	
+
 	settings := viper.AllSettings()
 	data, err := yaml.Marshal(settings)
 	if err != nil {

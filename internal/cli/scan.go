@@ -6,19 +6,19 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/sirupsen/logrus"
 
-	"github.com/kholcomb/k8sec-toolkit/internal/scanner"
 	"github.com/kholcomb/k8sec-toolkit/internal/config"
+	"github.com/kholcomb/k8sec-toolkit/internal/scanner"
 	"github.com/kholcomb/k8sec-toolkit/pkg/output"
 )
 
 var (
 	scanNamespaces []string
-	scanTools     []string
-	scanTimeout   time.Duration
+	scanTools      []string
+	scanTimeout    time.Duration
 )
 
 // newScanCommand creates the scan subcommand
@@ -58,7 +58,7 @@ Examples:
 // runScan executes the security scan
 func runScan(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
-	
+
 	logrus.Info("Starting K8Sec Toolkit security scan...")
 
 	// Load configuration
@@ -100,7 +100,7 @@ func runScan(cmd *cobra.Command, args []string) error {
 		contexts = []string{""} // Use default context
 	}
 
-	logrus.Infof("Scanning %d context(s) with tools: %s", 
+	logrus.Infof("Scanning %d context(s) with tools: %s",
 		len(contexts), strings.Join(cfg.Scan.Tools, ", "))
 
 	// Create scanner
@@ -110,7 +110,7 @@ func runScan(cmd *cobra.Command, args []string) error {
 	allResults := make([]*scanner.ScanResult, 0, len(contexts))
 	for _, contextName := range contexts {
 		logrus.Infof("Scanning context: %s", contextName)
-		
+
 		scanCtx, cancel := context.WithTimeout(ctx, cfg.Scan.Timeout)
 		defer cancel()
 

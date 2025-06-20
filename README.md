@@ -9,6 +9,7 @@ A comprehensive Kubernetes security scanner that orchestrates best-in-class open
 ## 🔒 Security-First Architecture
 
 K8Sec Toolkit implements **defense-in-depth security** with:
+
 - **Secure Command Execution**: Built-in command validation and allowlisting
 - **Input Validation**: Comprehensive sanitization and allowlisting
 - **Binary Integrity**: Path validation and integrity verification
@@ -48,12 +49,12 @@ brew install trivy kubescape
 # Scan current context with default tools
 k8sec-toolkit scan
 
-# Scan specific context with selected tools  
+# Scan specific context with selected tools
 k8sec-toolkit scan --context my-cluster --tools trivy,kubescape
 
 # Output in different formats
 k8sec-toolkit scan --output json
-k8sec-toolkit scan --output yaml  
+k8sec-toolkit scan --output yaml
 k8sec-toolkit scan --output summary
 
 # Scan specific namespaces
@@ -71,7 +72,7 @@ $ k8sec-toolkit scan --output summary
 K8Sec Toolkit Security Scan Summary
 ============================
 
-Context: 
+Context:
   Cluster: kubernetes (v1.32.2)
   Findings: 250 (Critical: 15, High: 78)
   Risk Score: 85.4
@@ -94,11 +95,11 @@ All tools are free, open source, and Apache 2.0 licensed:
 
 | Tool | Purpose | Website |
 |------|---------|---------|
-| **[Trivy](https://trivy.dev/)** | Container vulnerability scanning | https://trivy.dev/ |
-| **[Kubescape](https://kubescape.io/)** | Configuration security & compliance | https://kubescape.io/ |
-| **[kube-bench](https://github.com/aquasecurity/kube-bench)** | CIS Kubernetes Benchmark | https://github.com/aquasecurity/kube-bench |
-| **[kubectl-who-can](https://github.com/aquasecurity/kubectl-who-can)** | RBAC analysis | https://github.com/aquasecurity/kubectl-who-can |
-| **[Polaris](https://polaris.docs.fairwinds.com/)** | Workload best practices | https://polaris.docs.fairwinds.com/ |
+| **[Trivy](https://trivy.dev/)** | Container vulnerability scanning | <https://trivy.dev/> |
+| **[Kubescape](https://kubescape.io/)** | Configuration security & compliance | <https://kubescape.io/> |
+| **[kube-bench](https://github.com/aquasecurity/kube-bench)** | CIS Kubernetes Benchmark | <https://github.com/aquasecurity/kube-bench> |
+| **[kubectl-who-can](https://github.com/aquasecurity/kubectl-who-can)** | RBAC analysis | <https://github.com/aquasecurity/kubectl-who-can> |
+| **[Polaris](https://polaris.docs.fairwinds.com/)** | Workload best practices | <https://polaris.docs.fairwinds.com/> |
 
 ## 🏗️ Architecture
 
@@ -118,11 +119,11 @@ K8Sec Toolkit follows a **secure tool orchestration** architecture:
 
 ### Key Principles
 
-✅ **Secure by Default**: All commands go through security validation  
-✅ **Defense in Depth**: Multiple security layers prevent attacks  
-✅ **Fail Safe**: Security failures block execution  
-✅ **Audit Everything**: Complete command execution audit trail  
-✅ **Zero Trust**: No user input is trusted without validation  
+✅ **Secure by Default**: All commands go through security validation
+✅ **Defense in Depth**: Multiple security layers prevent attacks
+✅ **Fail Safe**: Security failures block execution
+✅ **Audit Everything**: Complete command execution audit trail
+✅ **Zero Trust**: No user input is trusted without validation
 
 ## 📋 Commands
 
@@ -156,13 +157,13 @@ Create `~/.k8sec-toolkit.yaml`:
 # Tool selection
 tools:
   enabled: ["trivy", "kubescape"]
-  
+
   trivy:
     severity: ["CRITICAL", "HIGH", "MEDIUM"]
     timeout: "5m"
-    
+
   kubescape:
-    frameworks: ["NSA", "MITRE"]  
+    frameworks: ["NSA", "MITRE"]
     threshold: 7.0
 
 # Scan settings
@@ -171,7 +172,7 @@ scan:
   parallel: true
   max_concurrency: 3
 
-# Output settings  
+# Output settings
 output:
   format: "table"
   include_raw_results: false
@@ -225,7 +226,7 @@ make coverage
 # Unit tests
 go test ./...
 
-# Integration tests  
+# Integration tests
 make test-integration
 
 # Security tests
@@ -270,6 +271,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ### Security Contributions
 
 For security-related contributions:
+
 1. Review [SECURITY.md](SECURITY.md) first
 2. All security changes require security review
 3. Security tests must pass

@@ -2,16 +2,16 @@ name: 🔒 Security Task
 description: Security-related task or vulnerability
 title: "[SECURITY] "
 labels: ["type/security", "status/todo", "priority/high", "claude-code/ready"]
-projects: ["kubesec-io/1"]
+projects: ["kholcomb/1"]
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
         ## 🔒 Security Task Template
-        
+
         Use this template for security-related tasks, vulnerability fixes, or security enhancements.
-        
+
         **⚠️ Security Notice**: For security vulnerabilities, follow responsible disclosure. Do NOT include sensitive details in public issues.
 
   - type: dropdown
@@ -55,12 +55,12 @@ body:
         - What is the security concern?
         - Which components are affected?
         - What is the potential impact?
-        
+
         ### Technical Details
         - Vulnerability type: [injection/exposure/etc]
         - Attack vector: [network/local/etc]
         - Components affected: [list files/modules]
-        
+
         **Note**: Avoid including exploit details in public issues
     validations:
       required: true
@@ -73,7 +73,7 @@ body:
       options:
         - "N/A"
         - "0.0-3.9 (Low)"
-        - "4.0-6.9 (Medium)"  
+        - "4.0-6.9 (Medium)"
         - "7.0-8.9 (High)"
         - "9.0-10.0 (Critical)"
       default: 0
@@ -90,11 +90,11 @@ body:
         - File: `internal/security/executor.go`
         - Function: `validateArguments()`
         - Line numbers: 123-145
-        
+
         ### Dependencies
         - Package: `github.com/example/package`
         - Version: `v1.2.3`
-        
+
         ### Configuration
         - Config files: `.golangci.yml`
         - Environment variables: `KUBESEC_*`
@@ -113,13 +113,13 @@ body:
         - [ ] Audit logging addition
         - [ ] Encryption implementation
         - [ ] Secure configuration
-        
+
         ### Compliance Requirements
         - [ ] OWASP compliance
         - [ ] CIS benchmark alignment
         - [ ] SOC 2 requirement
         - [ ] Industry standard compliance
-        
+
         ### Testing Requirements
         - [ ] Security unit tests
         - [ ] Penetration testing
@@ -138,13 +138,13 @@ body:
         1. Temporary mitigation:
         2. Risk assessment:
         3. Communication plan:
-        
+
         ### Long-term Solution
         1. Code changes required:
         2. Configuration updates:
         3. Documentation updates:
         4. Testing approach:
-        
+
         ### Verification Steps
         1. Security testing:
         2. Code review:
@@ -180,20 +180,20 @@ body:
         1. **Positive Testing**:
            - Valid input scenarios
            - Normal operation verification
-        
+
         2. **Negative Testing**:
            - Invalid input testing
            - Boundary condition testing
            - Malicious input testing
-        
+
         3. **Penetration Testing**:
            - Attack scenario simulation
            - Vulnerability scanning
            - Security tool verification
-        
+
         ### Automation
         - [ ] SAST integration
-        - [ ] DAST integration  
+        - [ ] DAST integration
         - [ ] Dependency scanning
         - [ ] Container scanning
     validations:
@@ -206,30 +206,30 @@ body:
       description: Additional context for automated security implementation
       placeholder: |
         ### For Claude Code Security Implementation
-        
+
         **Security Patterns to Follow:**
         - Existing security patterns in codebase
         - Security libraries already in use
         - Validation patterns to replicate
-        
+
         **Security Testing Commands:**
         ```bash
         # Security scanning commands
         make security-check
         gosec ./...
         ```
-        
+
         **Security Review Points:**
         - Input validation locations
         - Authentication mechanisms
         - Authorization checks
         - Audit logging requirements
-        
+
         **Related Security Issues:**
         - Previous security fixes: #
         - Related vulnerabilities: #
         - Security enhancement requests: #
-        
+
         **Compliance Requirements:**
         - Standards to follow: [OWASP/CIS/etc]
         - Documentation to update: [SECURITY.md]
@@ -239,9 +239,9 @@ body:
     attributes:
       value: |
         ---
-        
+
         ## 🔒 Security Response Process
-        
+
         1. **Immediate Assessment**: Security team reviews severity and impact
         2. **Risk Evaluation**: Determine if immediate action required
         3. **Communication**: Notify stakeholders if critical
@@ -250,7 +250,7 @@ body:
         6. **Security Review**: Comprehensive security review of solution
         7. **Deployment**: Deploy with security validation
         8. **Post-Deployment**: Monitor and verify fix effectiveness
-        
+
         **⚠️ Critical Security Issues**: Follow emergency response procedures for critical vulnerabilities.
-        
+
         **Note for Claude Code**: This security task format ensures comprehensive security implementation with proper testing and validation.
