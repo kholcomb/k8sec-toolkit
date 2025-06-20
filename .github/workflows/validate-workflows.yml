@@ -1,0 +1,51 @@
+name: Validate Workflows
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/*.yml'
+      - '.github/workflows/*.yaml'
+  push:
+    branches: [main, develop]
+    paths:
+      - '.github/workflows/*.yml'
+      - '.github/workflows/*.yaml'
+
+jobs:
+  validate:
+    name: Validate GitHub Actions Workflows
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Validate workflow files
+      uses: rhysd/actionlint@v1.6.26
+      with:
+        flags: "-color"
+    
+    - name: Check for hardcoded secrets
+      run: |
+        echo "Checking for potential hardcoded secrets in workflows..."
+        if grep -r "password\|apikey\|api_key" .github/workflows/ | grep -v "secrets\." | grep -v "GITHUB_TOKEN" | grep -v "#"; then
+          echo "❌ Found potential hardcoded secrets in workflows!"
+          exit 1
+        else
+          echo "✅ No hardcoded secrets found in workflows"
+        fi
+    
+    - name: Validate action versions
+      run: |
+        echo "Checking for unpinned action versions..."
+        if grep -r "uses:.*@master\|uses:.*@main" .github/workflows/ | grep -v "#"; then
+          echo "⚠️  Warning: Found actions using master/main branch instead of pinned versions"
+        fi
+    
+    - name: Check workflow permissions
+      run: |
+        echo "Checking for overly permissive workflow permissions..."
+        if grep -r "permissions: write-all" .github/workflows/; then
+          echo "❌ Found overly permissive workflow permissions!"
+          exit 1
+        else
+          echo "✅ Workflow permissions look good"
+        fi
