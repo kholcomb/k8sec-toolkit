@@ -1,8 +1,8 @@
-# KubeSec Security Documentation
+# K8Sec Toolkit Security Documentation
 
 ## Security Architecture
 
-KubeSec implements defense-in-depth security measures to protect against various attack vectors while orchestrating external security tools.
+K8Sec Toolkit implements defense-in-depth security measures to protect against various attack vectors while orchestrating external security tools.
 
 ## Security Measures Implemented
 
@@ -35,7 +35,7 @@ KubeSec implements defense-in-depth security measures to protect against various
 
 **Path Validation**:
 - Absolute path requirements
-- Allowlisted binary names only (`trivy`, `kubescape`)
+- Allowlisted binary names only (`trivy`, `kubescape`, `kubectl-who-can`, `kube-bench`, `polaris`)
 - File existence and permission verification
 - Protection against path traversal attacks
 
@@ -113,7 +113,7 @@ SECURITY_AUDIT: Command completed [successfully|with error] - Duration: [time]
 **DO NOT** create public GitHub issues for security vulnerabilities.
 
 **Instead**:
-1. Email security issues to: [security@kubesec.io]
+1. Email security issues to: [security@k8sec-toolkit.dev] or create a private security advisory on GitHub
 2. Include detailed reproduction steps
 3. Provide impact assessment
 4. Include suggested mitigations if known
@@ -187,7 +187,7 @@ Recommended monitoring:
 
 ## Security Compliance
 
-KubeSec security measures align with:
+K8Sec Toolkit security measures align with:
 - **OWASP Top 10** - Input validation, injection prevention
 - **CIS Security Guidelines** - Secure configuration practices
 - **NIST Cybersecurity Framework** - Defense-in-depth implementation
@@ -223,5 +223,5 @@ Active research areas:
 ---
 
 **Last Updated**: 2025-06-20  
-**Security Version**: 1.0  
+**Security Version**: 2.0  
 **Next Review**: 2025-09-20
