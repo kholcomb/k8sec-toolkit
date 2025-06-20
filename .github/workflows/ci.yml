@@ -63,8 +63,8 @@ jobs:
       uses: returntocorp/semgrep-action@v1
       with:
         publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
-        publishDeployment: false
-        generateSarif: true
+      env:
+        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
       continue-on-error: true
         
     - name: Upload SARIF file
@@ -87,7 +87,7 @@ jobs:
         go-version: ${{ env.GO_VERSION }}
     
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@0.12.0
       with:
         scan-type: 'fs'
         scan-ref: '.'
@@ -112,7 +112,6 @@ jobs:
       uses: gitleaks/gitleaks-action@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
       continue-on-error: true
 
   build:
