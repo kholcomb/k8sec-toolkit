@@ -24,11 +24,15 @@ K8Sec Toolkit implements defense-in-depth security measures to protect against v
 
 - `internal/tools/kubescape.go` - Namespace, context, and framework validation
 - `internal/tools/trivy.go` - Severity, path, and timeout validation
+- `internal/tools/kubebench.go` - CIS benchmark target and version validation
+- `internal/tools/kubectlwhocan.go` - RBAC verb, resource, and namespace validation
 - `internal/security/executor.go` - Comprehensive argument pattern matching
 
 **Validation includes**:
 
 - Kubernetes resource name patterns (RFC 1123 compliant)
+- RBAC verb validation (get, list, create, update, patch, delete, deletecollection, watch, *)
+- Resource type validation with anti-path-traversal protection
 - Path sanitization with `filepath.Clean`
 - Length limits (namespaces: 63 chars, contexts: 253 chars)
 - Character allowlists for all user inputs
@@ -38,7 +42,7 @@ K8Sec Toolkit implements defense-in-depth security measures to protect against v
 **Path Validation**:
 
 - Absolute path requirements
-- Allowlisted binary names only (`trivy`, `kubescape`, `kubectl-who-can`, `kube-bench`, `polaris`)
+- Allowlisted binary names only (`trivy`, `kubescape`, `kube-bench`, `kubectl-who-can`, `polaris`)
 - File existence and permission verification
 - Protection against path traversal attacks
 
@@ -92,6 +96,7 @@ SECURITY_AUDIT: Command completed [successfully|with error] - Duration: [time]
 2. **Environment Manipulation**: PATH, environment variable attacks
 3. **Binary Replacement**: Replacing legitimate tools with malicious ones
 4. **Configuration Tampering**: Malicious kubeconfig or tool configurations
+5. **RBAC Privilege Escalation**: Exploiting wide permissions to gain cluster-admin access
 
 ## Security Testing
 
