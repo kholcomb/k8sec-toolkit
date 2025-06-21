@@ -68,7 +68,13 @@ func (s *Scanner) initializeTools() {
 		s.tools["kube-bench"] = kubeBenchTool
 	}
 
-	// TODO: Initialize other tools (rbac, polaris)
+	// Initialize kubectl-who-can (RBAC analysis)
+	if s.isToolEnabled("rbac") {
+		rbacTool := tools.NewKubectlWhoCanWrapper(s.config.Tools.RBAC)
+		s.tools["rbac"] = rbacTool
+	}
+
+	// TODO: Initialize other tools (polaris)
 
 	s.logger.Infof("Initialized %d security tools", len(s.tools))
 }
