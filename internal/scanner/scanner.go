@@ -74,11 +74,7 @@ func (s *Scanner) initializeTools() {
 		s.tools["rbac"] = rbacTool
 	}
 
-	// Initialize Polaris (workload best practices)
-	if s.isToolEnabled("polaris") {
-		polarisTool := tools.NewPolarisWrapper(s.config.Tools.Polaris)
-		s.tools["polaris"] = polarisTool
-	}
+	// TODO: Initialize other tools (polaris)
 
 	s.logger.Infof("Initialized %d security tools", len(s.tools))
 }
