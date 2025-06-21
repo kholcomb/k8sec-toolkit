@@ -40,7 +40,7 @@ go build -o k8sec-toolkit cmd/k8sec-toolkit/main.go
 make build
 
 # Install dependencies (macOS with Homebrew)
-brew install trivy kubescape
+brew install trivy kubescape kube-bench kubectl-who-can polaris
 ```
 
 ### Basic Usage
@@ -50,7 +50,7 @@ brew install trivy kubescape
 k8sec-toolkit scan
 
 # Scan specific context with selected tools
-k8sec-toolkit scan --context my-cluster --tools trivy,kubescape,kube-bench,rbac
+k8sec-toolkit scan --context my-cluster --tools trivy,kubescape,kube-bench,rbac,polaris
 
 # Output in different formats
 k8sec-toolkit scan --output json
@@ -76,7 +76,7 @@ Context:
   Cluster: kubernetes (v1.32.2)
   Findings: 250 (Critical: 15, High: 78)
   Risk Score: 85.4
-  Tools: trivy, kubescape, kube-bench, rbac
+  Tools: trivy, kubescape, kube-bench, rbac, polaris
 
 Critical Issues:
 • CVE-2023-12345: Container image vulnerability in nginx:1.20
@@ -130,7 +130,7 @@ K8Sec Toolkit follows a **secure tool orchestration** architecture:
 ```bash
 # Scan commands
 k8sec-toolkit scan [context...]              # Scan clusters for security issues
-k8sec-toolkit scan --tools trivy             # Use specific tools only
+k8sec-toolkit scan --tools trivy,rbac        # Use specific tools only
 k8sec-toolkit scan --namespaces ns1,ns2      # Scan specific namespaces
 
 # Tool management
@@ -156,7 +156,7 @@ Create `~/.k8sec-toolkit.yaml`:
 ```yaml
 # Tool selection
 tools:
-  enabled: ["trivy", "kubescape", "kube-bench", "rbac"]
+  enabled: ["trivy", "kubescape", "kube-bench", "rbac", "polaris"]
 
   trivy:
     severity: ["CRITICAL", "HIGH", "MEDIUM"]
@@ -174,6 +174,11 @@ tools:
     check_dangerous_permissions: true
     analyze_unused_permissions: true
     generate_least_privilege: false
+
+  polaris:
+    config_path: ""  # Use default built-in config
+    only_show_failed_tests: true
+    output_format: "json"
 
 # Scan settings
 scan:

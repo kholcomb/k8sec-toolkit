@@ -45,14 +45,13 @@ Thank you for your interest in contributing to K8Sec Toolkit! This document prov
    make pre-commit-install
    ```
 
-4. **Install additional tools:**
+4. **Install security tools (for development and testing):**
 
    ```bash
-   # Install golangci-lint for comprehensive linting
-   go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+   # Install security scanning tools (macOS with Homebrew)
+   brew install trivy kubescape kube-bench kubectl-who-can polaris
 
-   # Install gosec for security scanning
-   go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
+   # Or install manually following tool-specific documentation
    ```
 
 ## Pre-commit Hooks
@@ -61,44 +60,48 @@ We use pre-commit hooks to ensure code quality and consistency. These hooks run 
 
 ### Installed Hooks
 
-#### Go Language Hooks
+#### Essential Go Hooks
 
-- **go-fmt**: Automatically formats Go code
-- **go-imports**: Organizes imports and formats code
+- **go-fmt**: Automatically formats Go code (built-in, fast, reliable)
 - **go-mod-tidy**: Cleans up go.mod and go.sum files
-- **go-vet**: Runs static analysis on Go code
-- **go-unit-tests**: Runs unit tests before commit
-- **golangci-lint**: Comprehensive Go linting
 
-#### Security Hooks
+#### Security Hooks (Critical for Security Project)
 
 - **detect-secrets**: Prevents committing secrets and credentials
-- **gitleaks**: Additional secret detection
-- **check-yaml**: Validates YAML syntax
-- **check-json**: Validates JSON files
+- **gitleaks**: Additional secret detection with GitLeaks
 
-#### Quality Hooks
+#### File Quality Hooks
 
 - **trailing-whitespace**: Removes trailing whitespace
 - **end-of-file-fixer**: Ensures files end with newline
 - **check-merge-conflict**: Detects merge conflict markers
-- **check-added-large-files**: Prevents large files (>500KB)
-- **mixed-line-ending**: Normalizes line endings
+- **check-yaml**: Validates YAML syntax
+- **check-json**: Validates JSON syntax
 
-#### Docker & Infrastructure
+#### Project-Specific Hooks
 
-- **hadolint**: Dockerfile linting for best practices
+- **check-k8sec-toolkit-references**: Ensures no old "kubesec" references remain
+- **check-go-module-path**: Validates go.mod uses correct module path
 
-#### Documentation
+### Moved to CI Pipeline
 
-- **markdownlint**: Markdown formatting and consistency
+The following checks are now handled in the CI pipeline to improve developer experience:
 
-#### Custom Project Hooks
+- **go-imports**: Requires goimports installation
+- **go-vet**: Environment/PATH issues in different setups
+- **go-unit-tests**: Comprehensive testing in CI
+- **golangci-lint**: Requires golangci-lint installation
+- **markdownlint**: Documentation style checks
+- **shellcheck**: Shell script linting
 
-- **check-k8sec-toolkit-references**: Ensures no old "kubesec" references
-- **check-go-module-path**: Validates correct Go module path
-- **check-binary-name-consistency**: Ensures consistent binary naming
-- **validate-github-actions**: GitHub Actions workflow validation
+## Benefits of Optimized Configuration
+
+- **No external tool installation requirements**: Faster setup for new contributors
+- **Fast, reliable commits**: Reduced friction in development workflow
+- **Security checks remain active**: Critical security validation preserved
+- **Essential quality maintained**: Core code quality standards enforced
+- **Development velocity improved**: Fewer blocking pre-commit failures
+
 
 ### Running Pre-commit Hooks
 
