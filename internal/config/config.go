@@ -123,7 +123,7 @@ func Load() (*Config, error) {
 // setDefaults sets default configuration values
 func setDefaults() {
 	// Tool defaults
-	viper.SetDefault("tools.enabled", []string{"trivy", "kubescape"})
+	viper.SetDefault("tools.enabled", []string{"trivy", "kubescape", "kube-bench"})
 
 	// Trivy defaults
 	viper.SetDefault("tools.trivy.severity", []string{"CRITICAL", "HIGH", "MEDIUM"})
