@@ -50,7 +50,7 @@ brew install trivy kubescape
 k8sec-toolkit scan
 
 # Scan specific context with selected tools
-k8sec-toolkit scan --context my-cluster --tools trivy,kubescape,kube-bench
+k8sec-toolkit scan --context my-cluster --tools trivy,kubescape,kube-bench,rbac
 
 # Output in different formats
 k8sec-toolkit scan --output json
@@ -76,7 +76,7 @@ Context:
   Cluster: kubernetes (v1.32.2)
   Findings: 250 (Critical: 15, High: 78)
   Risk Score: 85.4
-  Tools: trivy, kubescape, kube-bench
+  Tools: trivy, kubescape, kube-bench, rbac
 
 Critical Issues:
 • CVE-2023-12345: Container image vulnerability in nginx:1.20
@@ -156,7 +156,7 @@ Create `~/.k8sec-toolkit.yaml`:
 ```yaml
 # Tool selection
 tools:
-  enabled: ["trivy", "kubescape", "kube-bench"]
+  enabled: ["trivy", "kubescape", "kube-bench", "rbac"]
 
   trivy:
     severity: ["CRITICAL", "HIGH", "MEDIUM"]
@@ -169,6 +169,11 @@ tools:
   kube_bench:
     version: "auto"
     targets: ["master", "node", "etcd", "policies"]
+
+  rbac:
+    check_dangerous_permissions: true
+    analyze_unused_permissions: true
+    generate_least_privilege: false
 
 # Scan settings
 scan:
