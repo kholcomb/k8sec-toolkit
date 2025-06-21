@@ -137,6 +137,40 @@ type FindingSummary struct {
 	Info          int            `json:"info"`
 }
 
+// ExecutiveSummary provides high-level insights for dashboard consumption
+type ExecutiveSummary struct {
+	// Overall assessment
+	SecurityPosture SecurityPostureLevel `json:"security_posture"`
+	RiskScore       float64              `json:"risk_score"`       // 0-100 scale
+	BusinessImpact  BusinessImpactLevel  `json:"business_impact"`  // Impact assessment
+	ComplianceScore float64              `json:"compliance_score"` // 0-100 scale
+	TrendDirection  TrendDirection       `json:"trend_direction"`  // Improving/Degrading/Stable
+
+	// Key metrics
+	CriticalFindings  int    `json:"critical_findings"`
+	HighFindings      int    `json:"high_findings"`
+	TotalFindings     int    `json:"total_findings"`
+	RemediationEffort string `json:"remediation_effort"` // High/Medium/Low
+	TimeToRemediate   string `json:"time_to_remediate"`  // Estimated time
+
+	// Risk breakdown
+	RiskDistribution RiskDistribution `json:"risk_distribution"`
+	TopRisks         []TopRisk        `json:"top_risks"`
+	CriticalAssets   []CriticalAsset  `json:"critical_assets"`
+
+	// Actionable insights
+	ImmediateActions []ActionItem `json:"immediate_actions"`
+	QuickWins        []ActionItem `json:"quick_wins"`
+	LongTermStrategy []ActionItem `json:"long_term_strategy"`
+
+	// Progress tracking
+	LastScanTime     time.Time `json:"last_scan_time"`
+	PreviousScore    float64   `json:"previous_score"`
+	ScoreChange      float64   `json:"score_change"`
+	NewFindings      int       `json:"new_findings"`
+	ResolvedFindings int       `json:"resolved_findings"`
+}
+
 // ScanResult represents the complete result of a security scan
 type ScanResult struct {
 	// Scan metadata
@@ -151,6 +185,9 @@ type ScanResult struct {
 	// Findings and summary
 	Findings []SecurityFinding `json:"findings"`
 	Summary  *FindingSummary   `json:"summary"`
+
+	// Executive insights for dashboard consumption
+	ExecutiveSummary *ExecutiveSummary `json:"executive_summary,omitempty"`
 
 	// Tool-specific results
 	ToolResults map[string]*ToolResult `json:"tool_results"`
@@ -180,3 +217,89 @@ const (
 	FindingTypeRBAC             FindingType = "rbac"
 	FindingTypeBestPractice     FindingType = "best-practice"
 )
+
+// SecurityPostureLevel represents overall security posture
+type SecurityPostureLevel string
+
+const (
+	SecurityPostureExcellent SecurityPostureLevel = "excellent"
+	SecurityPostureGood      SecurityPostureLevel = "good"
+	SecurityPostureFair      SecurityPostureLevel = "fair"
+	SecurityPosturePoor      SecurityPostureLevel = "poor"
+	SecurityPostureCritical  SecurityPostureLevel = "critical"
+)
+
+// BusinessImpactLevel represents potential business impact
+type BusinessImpactLevel string
+
+const (
+	BusinessImpactLow      BusinessImpactLevel = "low"
+	BusinessImpactMedium   BusinessImpactLevel = "medium"
+	BusinessImpactHigh     BusinessImpactLevel = "high"
+	BusinessImpactCritical BusinessImpactLevel = "critical"
+)
+
+// TrendDirection represents security trend over time
+type TrendDirection string
+
+const (
+	TrendImproving TrendDirection = "improving"
+	TrendStable    TrendDirection = "stable"
+	TrendDegrading TrendDirection = "degrading"
+)
+
+// RiskDistribution provides risk category breakdown
+type RiskDistribution struct {
+	Infrastructure  float64 `json:"infrastructure"`   // % of risk from infra
+	Applications    float64 `json:"applications"`     // % of risk from apps
+	Configuration   float64 `json:"configuration"`    // % of risk from config
+	AccessControl   float64 `json:"access_control"`   // % of risk from RBAC
+	NetworkSecurity float64 `json:"network_security"` // % of risk from network
+	DataProtection  float64 `json:"data_protection"`  // % of risk from data
+}
+
+// TopRisk represents a high-priority security risk
+type TopRisk struct {
+	ID                string              `json:"id"`
+	Title             string              `json:"title"`
+	Description       string              `json:"description"`
+	Impact            BusinessImpactLevel `json:"impact"`
+	Probability       string              `json:"probability"` // High/Medium/Low
+	RiskScore         float64             `json:"risk_score"`  // 0-100
+	Category          string              `json:"category"`
+	AffectedAssets    int                 `json:"affected_assets"`
+	EstimatedCost     string              `json:"estimated_cost"`  // Cost of breach
+	TimeToExploit     string              `json:"time_to_exploit"` // How quickly exploitable
+	RecommendedAction string              `json:"recommended_action"`
+}
+
+// CriticalAsset represents a high-value asset requiring attention
+type CriticalAsset struct {
+	Name               string  `json:"name"`
+	Type               string  `json:"type"` // Pod, Service, etc.
+	Namespace          string  `json:"namespace"`
+	CriticalityLevel   string  `json:"criticality_level"` // Critical/High/Medium
+	VulnerabilityCount int     `json:"vulnerability_count"`
+	MisconfigCount     int     `json:"misconfig_count"`
+	RiskScore          float64 `json:"risk_score"`
+	BusinessFunction   string  `json:"business_function"`   // What business function it serves
+	DataClassification string  `json:"data_classification"` // PII, PCI, etc.
+}
+
+// ActionItem represents a recommended security action
+type ActionItem struct {
+	ID                  string     `json:"id"`
+	Title               string     `json:"title"`
+	Description         string     `json:"description"`
+	Priority            string     `json:"priority"`         // Critical/High/Medium/Low
+	Category            string     `json:"category"`         // Patch, Config, Process
+	EstimatedEffort     string     `json:"estimated_effort"` // Hours or story points
+	BusinessValue       string     `json:"business_value"`   // Risk reduction value
+	Prerequisites       []string   `json:"prerequisites"`
+	AffectedSystems     []string   `json:"affected_systems"`
+	ImplementationSteps []string   `json:"implementation_steps"`
+	SuccessMetrics      []string   `json:"success_metrics"`
+	Owner               string     `json:"owner,omitempty"` // Team/person responsible
+	DueDate             *time.Time `json:"due_date,omitempty"`
+	RelatedFindings     []string   `json:"related_findings"` // Finding IDs
+}

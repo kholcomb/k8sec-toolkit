@@ -124,8 +124,8 @@ func getValidTargets() []string {
 
 // validateVersion validates Kubernetes version format for security
 func validateVersion(version string) error {
-	if version == "" {
-		return nil // Empty version is allowed (auto-detect)
+	if version == "" || version == "auto" {
+		return nil // Empty version or auto is allowed (will auto-detect)
 	}
 	if !validVersionPattern.MatchString(version) {
 		return fmt.Errorf("invalid version format: %s (expected format: v1.24 or 1.25.0)", version)
@@ -181,7 +181,7 @@ func (k *KubeBenchWrapper) Execute(ctx context.Context, config types.ToolConfig)
 	}
 
 	// Execute command using secure executor
-	execResult, err := k.executor.Execute(ctx, "kube-bench-scan", args)
+	execResult, err := k.executor.Execute(ctx, "kube-bench", args)
 	duration := time.Since(startTime)
 
 	result := &types.ToolResult{

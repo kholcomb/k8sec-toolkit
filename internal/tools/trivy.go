@@ -23,29 +23,27 @@ type TrivyWrapper struct {
 
 // TrivyKubernetesReport represents Trivy's Kubernetes scan output
 type TrivyKubernetesReport struct {
-	SchemaVersion int                    `json:"SchemaVersion"`
-	ArtifactName  string                 `json:"ArtifactName"`
-	ArtifactType  string                 `json:"ArtifactType"`
-	Resources     []TrivyResourceResult  `json:"Resources"`
-	Metadata      map[string]interface{} `json:"Metadata"`
+	ClusterName string                 `json:"ClusterName"`
+	Resources   []TrivyResourceResult  `json:"Resources"`
+	Metadata    map[string]interface{} `json:"Metadata"`
 }
 
 // TrivyResourceResult represents a single resource scan result
 type TrivyResourceResult struct {
-	Namespace         string            `json:"Namespace"`
-	Kind              string            `json:"Kind"`
-	Name              string            `json:"Name"`
-	Results           []TrivyVulnResult `json:"Results"`
-	Misconfigurations []TrivyMisconfig  `json:"Misconfigurations"`
-	Metadata          []interface{}     `json:"Metadata"`
+	Namespace string            `json:"Namespace"`
+	Kind      string            `json:"Kind"`
+	Name      string            `json:"Name"`
+	Results   []TrivyVulnResult `json:"Results"`
+	Metadata  []interface{}     `json:"Metadata"`
 }
 
 // TrivyVulnResult represents vulnerability scan results
 type TrivyVulnResult struct {
-	Target          string               `json:"Target"`
-	Class           string               `json:"Class"`
-	Type            string               `json:"Type"`
-	Vulnerabilities []TrivyVulnerability `json:"Vulnerabilities"`
+	Target            string               `json:"Target"`
+	Class             string               `json:"Class"`
+	Type              string               `json:"Type"`
+	Vulnerabilities   []TrivyVulnerability `json:"Vulnerabilities"`
+	Misconfigurations []TrivyMisconfig     `json:"Misconfigurations"`
 }
 
 // TrivyVulnerability represents a single vulnerability
@@ -157,7 +155,13 @@ func (t *TrivyWrapper) Execute(ctx context.Context, config types.ToolConfig) (*t
 	}
 
 	if err != nil {
-		return result, fmt.Errorf("trivy execution failed: %w", err)
+		// Check if it's just a warning exit code (trivy returns non-zero when findings exist)
+		if execResult.ExitCode > 0 && len(execResult.Stdout) > 0 {
+			t.logger.Info("trivy returned non-zero exit code but has output (likely due to findings)")
+			// Continue processing - this is normal when security issues are found
+		} else {
+			return result, fmt.Errorf("trivy execution failed: %w", err)
+		}
 	}
 
 	// Parse results
@@ -225,18 +229,19 @@ func (t *TrivyWrapper) parseResults(output []byte) ([]types.SecurityFinding, err
 
 	// Process each resource
 	for _, resource := range report.Resources {
-		// Process vulnerabilities
+		// Process vulnerabilities and misconfigurations
 		for _, result := range resource.Results {
+			// Process vulnerabilities
 			for _, vuln := range result.Vulnerabilities {
 				finding := t.vulnerabilityToFinding(vuln, resource)
 				findings = append(findings, finding)
 			}
-		}
 
-		// Process misconfigurations
-		for _, misconfig := range resource.Misconfigurations {
-			finding := t.misconfigToFinding(misconfig, resource)
-			findings = append(findings, finding)
+			// Process misconfigurations
+			for _, misconfig := range result.Misconfigurations {
+				finding := t.misconfigToFinding(misconfig, resource)
+				findings = append(findings, finding)
+			}
 		}
 	}
 

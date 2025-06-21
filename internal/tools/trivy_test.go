@@ -135,9 +135,7 @@ func TestTrivyWrapper_parseResults(t *testing.T) {
 
 	// Sample Trivy JSON output
 	sampleOutput := TrivyKubernetesReport{
-		SchemaVersion: 2,
-		ArtifactName:  "test-cluster",
-		ArtifactType:  "kubernetes",
+		ClusterName: "test-cluster",
 		Resources: []TrivyResourceResult{
 			{
 				Namespace: "default",
@@ -167,16 +165,21 @@ func TestTrivyWrapper_parseResults(t *testing.T) {
 							},
 						},
 					},
-				},
-				Misconfigurations: []TrivyMisconfig{
 					{
-						ID:          "KSV001",
-						Type:        "Kubernetes Security Check",
-						Title:       "Process can elevate its own privileges",
-						Description: "A program inside the container can elevate its own privileges",
-						Message:     "Container 'test-container' should set 'allowPrivilegeEscalation' to false",
-						Severity:    "MEDIUM",
-						Status:      "FAIL",
+						Target: "test-container",
+						Class:  "config",
+						Type:   "kubernetes",
+						Misconfigurations: []TrivyMisconfig{
+							{
+								ID:          "KSV001",
+								Type:        "Kubernetes Security Check",
+								Title:       "Process can elevate its own privileges",
+								Description: "A program inside the container can elevate its own privileges",
+								Message:     "Container 'test-container' should set 'allowPrivilegeEscalation' to false",
+								Severity:    "MEDIUM",
+								Status:      "FAIL",
+							},
+						},
 					},
 				},
 			},
@@ -231,8 +234,8 @@ func TestTrivyWrapper_parseResultsEmpty(t *testing.T) {
 
 	// Empty result
 	sampleOutput := TrivyKubernetesReport{
-		SchemaVersion: 2,
-		Resources:     []TrivyResourceResult{},
+		ClusterName: "empty-cluster",
+		Resources:   []TrivyResourceResult{},
 	}
 
 	jsonOutput, err := json.Marshal(sampleOutput)
@@ -475,11 +478,18 @@ func TestTrivyWrapper_parseResultsMultipleResources(t *testing.T) {
 				Namespace: "kube-system",
 				Kind:      "Deployment",
 				Name:      "deployment-1",
-				Misconfigurations: []TrivyMisconfig{
+				Results: []TrivyVulnResult{
 					{
-						ID:       "KSV001",
-						Severity: "MEDIUM",
-						Title:    "Test misconfig",
+						Target: "deployment-1",
+						Class:  "config",
+						Type:   "kubernetes",
+						Misconfigurations: []TrivyMisconfig{
+							{
+								ID:       "KSV001",
+								Severity: "MEDIUM",
+								Title:    "Test misconfig",
+							},
+						},
 					},
 				},
 			},
