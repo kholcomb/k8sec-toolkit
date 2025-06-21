@@ -62,8 +62,23 @@ func (s *Scanner) initializeTools() {
 		s.tools["kubescape"] = kubescapeTool
 	}
 
-	// TODO: Initialize other tools (kube-bench, rbac, polaris)
-	// For MVP, we focus on Trivy + Kubescape
+	// Initialize kube-bench
+	if s.isToolEnabled("kube-bench") {
+		kubeBenchTool := tools.NewKubeBenchWrapper(s.config.Tools.KubeBench)
+		s.tools["kube-bench"] = kubeBenchTool
+	}
+
+	// Initialize kubectl-who-can (RBAC analysis)
+	if s.isToolEnabled("rbac") {
+		rbacTool := tools.NewKubectlWhoCanWrapper(s.config.Tools.RBAC)
+		s.tools["rbac"] = rbacTool
+	}
+
+	// Initialize Polaris (workload best practices)
+	if s.isToolEnabled("polaris") {
+		polarisTool := tools.NewPolarisWrapper(s.config.Tools.Polaris)
+		s.tools["polaris"] = polarisTool
+	}
 
 	s.logger.Infof("Initialized %d security tools", len(s.tools))
 }

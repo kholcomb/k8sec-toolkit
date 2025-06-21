@@ -49,7 +49,7 @@ Examples:
 
 	// Scan-specific flags
 	cmd.Flags().StringSliceVarP(&scanNamespaces, "namespaces", "n", []string{}, "namespaces to scan (default: all accessible)")
-	cmd.Flags().StringSliceVar(&scanTools, "tools", []string{"trivy", "kubescape"}, "tools to run (trivy,kubescape,kube-bench,rbac,polaris)")
+	cmd.Flags().StringSliceVar(&scanTools, "tools", []string{"trivy", "kubescape", "kube-bench", "rbac", "polaris"}, "tools to run (trivy,kubescape,kube-bench,rbac,polaris)")
 	cmd.Flags().DurationVar(&scanTimeout, "timeout", 10*time.Minute, "scan timeout")
 
 	return cmd
