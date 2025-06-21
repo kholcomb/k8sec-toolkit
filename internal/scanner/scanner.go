@@ -85,6 +85,17 @@ func (s *Scanner) initializeTools() {
 
 // isToolEnabled checks if a tool is enabled in configuration
 func (s *Scanner) isToolEnabled(toolName string) bool {
+	// Check scan tools first (from CLI or scan config)
+	if len(s.config.Scan.Tools) > 0 {
+		for _, enabled := range s.config.Scan.Tools {
+			if enabled == toolName {
+				return true
+			}
+		}
+		return false
+	}
+
+	// Fallback to tools enabled configuration
 	for _, enabled := range s.config.Tools.Enabled {
 		if enabled == toolName {
 			return true

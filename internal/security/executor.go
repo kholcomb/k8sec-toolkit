@@ -1,6 +1,7 @@
 package security
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -95,7 +96,7 @@ var commandRegistry = map[string]CommandTemplate{
 			{Pattern: regexp.MustCompile(`^--context$`), Required: false, Description: "Context flag"},
 			{Pattern: regexp.MustCompile(`^[a-zA-Z0-9._-]+$`), Required: false, Description: "Context name"},
 			{Pattern: regexp.MustCompile(`^--severity$`), Required: false, Description: "Severity flag"},
-			{Pattern: regexp.MustCompile(`^(CRITICAL|HIGH|MEDIUM|LOW|INFO)(,(CRITICAL|HIGH|MEDIUM|LOW|INFO))*$`), Required: false, Description: "Severity levels"},
+			{Pattern: regexp.MustCompile(`^(UNKNOWN|CRITICAL|HIGH|MEDIUM|LOW)(,(UNKNOWN|CRITICAL|HIGH|MEDIUM|LOW))*$`), Required: false, Description: "Severity levels"},
 			{Pattern: regexp.MustCompile(`^--include-namespaces$`), Required: false, Description: "Include namespaces flag"},
 			{Pattern: regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(,[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`), Required: false, Description: "Namespace list"},
 			{Pattern: regexp.MustCompile(`^--timeout$`), Required: false, Description: "Timeout flag"},
@@ -177,6 +178,118 @@ var commandRegistry = map[string]CommandTemplate{
 		Timeout:     5 * time.Minute,
 		Description: "Update Kubescape rule database",
 	},
+	"kubectl-who-can": {
+		Name:       "kubectl-who-can RBAC Analysis",
+		BinaryName: "kubectl-who-can",
+		BinaryPaths: []string{
+			"/usr/local/bin/kubectl-who-can",
+			"/opt/homebrew/bin/kubectl-who-can",
+			"/usr/bin/kubectl-who-can",
+		},
+		Arguments: []ArgumentPattern{
+			{Pattern: regexp.MustCompile(`^(get|list|create|update|patch|delete|deletecollection|watch|\*)$`), Required: true, Description: "RBAC verb"},
+			{Pattern: regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)*(/[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)?$|^\*$`), Required: true, Description: "Kubernetes resource"},
+			{Pattern: regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?$`), Required: false, Description: "Resource name"},
+			{Pattern: regexp.MustCompile(`^--namespace$`), Required: false, Description: "Namespace flag"},
+			{Pattern: regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`), Required: false, Description: "Namespace name"},
+			{Pattern: regexp.MustCompile(`^--output$`), Required: false, Description: "Output format flag"},
+			{Pattern: regexp.MustCompile(`^json$`), Required: false, Description: "JSON format"},
+			{Pattern: regexp.MustCompile(`^--kubeconfig$`), Required: false, Description: "Kubeconfig flag"},
+			{Pattern: regexp.MustCompile(`^[/a-zA-Z0-9._-]+$`), Required: false, Description: "Kubeconfig path"},
+			{Pattern: regexp.MustCompile(`^--context$`), Required: false, Description: "Context flag"},
+			{Pattern: regexp.MustCompile(`^[a-zA-Z0-9._-]+$`), Required: false, Description: "Context name"},
+		},
+		Timeout:     2 * time.Minute,
+		Description: "Analyze RBAC permissions",
+	},
+	"kubectl-who-can-version": {
+		Name:       "kubectl-who-can Version Check",
+		BinaryName: "kubectl-who-can",
+		BinaryPaths: []string{
+			"/usr/local/bin/kubectl-who-can",
+			"/opt/homebrew/bin/kubectl-who-can",
+			"/usr/bin/kubectl-who-can",
+		},
+		Arguments: []ArgumentPattern{
+			{Pattern: regexp.MustCompile(`^--version$`), Required: false, Description: "Version flag"},
+			{Pattern: regexp.MustCompile(`^--help$`), Required: false, Description: "Help flag"},
+		},
+		Timeout:     30 * time.Second,
+		Description: "Get kubectl-who-can version information",
+	},
+	"kube-bench": {
+		Name:       "kube-bench CIS Benchmark",
+		BinaryName: "kube-bench",
+		BinaryPaths: []string{
+			"/usr/local/bin/kube-bench",
+			"/opt/homebrew/bin/kube-bench",
+			"/usr/bin/kube-bench",
+		},
+		Arguments: []ArgumentPattern{
+			{Pattern: regexp.MustCompile(`^--json$`), Required: false, Description: "JSON output flag"},
+			{Pattern: regexp.MustCompile(`^--version$`), Required: false, Description: "Kubernetes version flag"},
+			{Pattern: regexp.MustCompile(`^v?(\d+)\.(\d+)(?:\.(\d+))?$`), Required: false, Description: "Kubernetes version"},
+			{Pattern: regexp.MustCompile(`^--targets$`), Required: false, Description: "Targets flag"},
+			{Pattern: regexp.MustCompile(`^(master|controlplane|etcd|node|policies|managedservices)(,(master|controlplane|etcd|node|policies|managedservices))*$`), Required: false, Description: "Target list"},
+			{Pattern: regexp.MustCompile(`^--kubeconfig$`), Required: false, Description: "Kubeconfig flag"},
+			{Pattern: regexp.MustCompile(`^[/a-zA-Z0-9._-]+$`), Required: false, Description: "Kubeconfig path"},
+			{Pattern: regexp.MustCompile(`^--config-dir$`), Required: false, Description: "Config directory flag"},
+			{Pattern: regexp.MustCompile(`^[/a-zA-Z0-9._-]+$`), Required: false, Description: "Config directory path"},
+		},
+		Timeout:     5 * time.Minute,
+		Description: "Run CIS Kubernetes Benchmark checks",
+	},
+	"kube-bench-version": {
+		Name:       "kube-bench Version Check",
+		BinaryName: "kube-bench",
+		BinaryPaths: []string{
+			"/usr/local/bin/kube-bench",
+			"/opt/homebrew/bin/kube-bench",
+			"/usr/bin/kube-bench",
+		},
+		Arguments: []ArgumentPattern{
+			{Pattern: regexp.MustCompile(`^--version$`), Required: true, Description: "Version flag"},
+		},
+		Timeout:     30 * time.Second,
+		Description: "Get kube-bench version information",
+	},
+	"polaris": {
+		Name:       "Polaris Best Practices",
+		BinaryName: "polaris",
+		BinaryPaths: []string{
+			"/usr/local/bin/polaris",
+			"/opt/homebrew/bin/polaris",
+			"/usr/bin/polaris",
+		},
+		Arguments: []ArgumentPattern{
+			{Pattern: regexp.MustCompile(`^audit$`), Required: true, Description: "Audit subcommand"},
+			{Pattern: regexp.MustCompile(`^--format$`), Required: false, Description: "Output format flag"},
+			{Pattern: regexp.MustCompile(`^json$`), Required: false, Description: "JSON format"},
+			{Pattern: regexp.MustCompile(`^--kubeconfig$`), Required: false, Description: "Kubeconfig flag"},
+			{Pattern: regexp.MustCompile(`^[/a-zA-Z0-9._-]+$`), Required: false, Description: "Kubeconfig path"},
+			{Pattern: regexp.MustCompile(`^--context$`), Required: false, Description: "Context flag"},
+			{Pattern: regexp.MustCompile(`^[a-zA-Z0-9._-]+$`), Required: false, Description: "Context name"},
+			{Pattern: regexp.MustCompile(`^--only-show-failed-tests$`), Required: false, Description: "Only failed tests flag"},
+			{Pattern: regexp.MustCompile(`^--severity$`), Required: false, Description: "Severity flag"},
+			{Pattern: regexp.MustCompile(`^(error|warning|info)(,(error|warning|info))*$`), Required: false, Description: "Severity levels"},
+		},
+		Timeout:     5 * time.Minute,
+		Description: "Analyze workload best practices",
+	},
+	"polaris-version": {
+		Name:       "Polaris Version Check",
+		BinaryName: "polaris",
+		BinaryPaths: []string{
+			"/usr/local/bin/polaris",
+			"/opt/homebrew/bin/polaris",
+			"/usr/bin/polaris",
+		},
+		Arguments: []ArgumentPattern{
+			{Pattern: regexp.MustCompile(`^version$`), Required: true, Description: "Version subcommand"},
+		},
+		Timeout:     30 * time.Second,
+		Description: "Get Polaris version information",
+	},
 }
 
 // Execute securely executes a pre-approved command with validation
@@ -233,22 +346,24 @@ func (se *SecureExecutor) Execute(ctx context.Context, commandKey string, args [
 
 	se.logger.Infof("SECURITY_AUDIT: Executing validated command - %s %v", binaryPath, args)
 
-	stdout, err := cmd.Output()
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err = cmd.Run()
 	duration := time.Since(startTime)
 
 	result := &ExecutionResult{
 		Command:    commandKey,
 		Arguments:  args,
 		ExitCode:   cmd.ProcessState.ExitCode(),
-		Stdout:     stdout,
+		Stdout:     stdout.Bytes(),
+		Stderr:     stderr.Bytes(),
 		Duration:   duration,
 		AuditTrail: fmt.Sprintf("%s - APPROVED and EXECUTED in %v", auditEntry, duration),
 	}
 
 	if err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
-			result.Stderr = exitError.Stderr
-		}
 		result.Error = err
 		se.logger.Warnf("SECURITY_AUDIT: Command completed with error - %v", err)
 	} else {
