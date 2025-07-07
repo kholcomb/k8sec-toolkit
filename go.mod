@@ -6,7 +6,7 @@ toolchain go1.24.4
 
 require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/olekukonko/tablewriter v1.0.7
+	github.com/olekukonko/tablewriter v1.0.8
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.17.0
